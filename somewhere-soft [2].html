@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>somewhere soft — a little place for the things we don't know how to say</title>
+<meta name="description" content="A quiet home for the feelings you don't have words for yet — letters, shared stories, and the psychology and neuroscience behind why we feel the way we do.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,340..620;1,9..144,400..560&family=Caveat:wght@500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,380..620;1,8..60,400..520&display=swap" rel="stylesheet">
+<style>
+/* ============================= TOKENS ============================= */
+:root{
+  --cream:#F7F1E6;
+  --ivory:#FBF7EF;
+  --beige:#EAE0C9;
+  --beige-deep:#DCCEA9;
+  --brown:#5A4A38;
+  --brown-soft:#7C6A54;
+  --ink:#3E3226;
+  --warm-gray:#8C8375;
+  --dusty-blue:#7791A3;
+  --sage:#87996E;
+  --lavender:#9C87AC;
+  --faded-yellow:#D9B65C;
+  --clay:#B5765A;
+  --line:rgba(90,74,56,0.16);
+  --shadow-soft:0 10px 26px rgba(62,50,38,0.10);
+  --shadow-paper:0 6px 18px rgba(62,50,38,0.14), 0 1px 2px rgba(62,50,38,0.08);
+  --radius-s:6px;
+  --radius-m:14px;
+  --sky-top:#EFE6D2;
+  --sky-bottom:#F8F2E4;
+  --font-display:'Fraunces', Georgia, 'Iowan Old Style', serif;
+  --font-hand:'Caveat', 'Segoe Script', cursive;
+  --font-body:'Source Serif 4', Georgia, 'Iowan Old Style', serif;
+  --dur:420ms;
+}
+html.night-mode{
+  --cream:#211D2B;
+  --ivory:#2B2636;
+  --beige:#332C42;
+  --beige-deep:#3C3450;
+  --brown:#EDE3D3;
+  --brown-soft:#C9BEDA;
+  --ink:#F4EEE3;
+  --line:rgba(237,227,211,0.14);
+  --sky-top:#161327;
+  --sky-bottom:#241F3A;
+  --shadow-soft:0 10px 26px rgba(0,0,0,0.35);
+  --shadow-paper:0 6px 18px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3);
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+html.reduce-motion *, html.reduce-motion *::before, html.reduce-motion *::after{
+  animation-duration:0.001ms !important; animation-iteration-count:1 !important;
+  transition-duration:0.001ms !important; scroll-behavior:auto !important;
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+}
+body{
+  margin:0;
+  background:var(--cream);
+  color:var(--ink);
+  font-family:var(--font-body);
+  font-size:17px;
+  line-height:1.65;
+  transition:background var(--dur) ease, color var(--dur) ease;
+  min-height:100vh;
+}
+h1,h2,h3,h4{
+  font-family:var(--font-display);
+  font-weight:560;
+  color:var(--brown);
+  line-height:1.15;
+  margin:0 0 .4em 0;
+  letter-spacing:-0.01em;
+}
+h2{font-size:1.7rem;}
+h3{font-size:1.25rem;}
+p{margin:0 0 1em 0;}
+a{color:var(--dusty-blue); text-decoration-thickness:1px;}
+button{font-family:inherit; cursor:pointer;}
+.visually-hidden{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap;}
+.skip-link{
+  position:absolute; left:8px; top:-60px; background:var(--brown); color:var(--ivory);
+  padding:.6em 1em; border-radius:var(--radius-s); z-index:999; transition:top .2s;
+}
+.skip-link:focus{top:8px;}
+:focus-visible{outline:3px solid var(--dusty-blue); outline-offset:3px; border-radius:4px;}
+
+/* ============================= LAYOUT SHELL ============================= */
+.sky-wrap{position:relative; overflow:hidden;}
+#app{position:relative; z-index:2;}
+.wrap{max-width:760px; margin:0 auto; padding:0 22px;}
+.wrap-wide{max-width:1020px; margin:0 auto; padding:0 22px;}
+
+header.site-header{
+  position:sticky; top:0; z-index:40;
+  background:linear-gradient(to bottom, var(--cream) 78%, transparent);
+  padding:14px 0 26px 0;
+  backdrop-filter:blur(2px);
+}
+.header-row{max-width:1020px; margin:0 auto; padding:0 22px; display:flex; align-items:center; justify-content:space-between; gap:14px;}
+.brand{display:flex; align-items:baseline; gap:10px; background:none; border:none; padding:0;}
+.brand-mark{font-family:var(--font-display); font-size:1.3rem; color:var(--brown); font-weight:560;}
+.brand-mark small{font-family:var(--font-hand); font-size:1rem; color:var(--brown-soft); margin-left:4px;}
+nav.room-nav{display:flex; gap:4px; flex-wrap:wrap;}
+nav.room-nav button{
+  background:transparent; border:1px solid transparent; color:var(--brown-soft);
+  font-size:.86rem; padding:7px 10px; border-radius:999px; font-family:var(--font-body);
+  transition:background var(--dur), border-color var(--dur), color var(--dur);
+  white-space:nowrap;
+}
+nav.room-nav button:hover, nav.room-nav button.active{
+  background:var(--ivory); border-color:var(--line); color:var(--brown);
+}
+.header-tools{display:flex; align-items:center; gap:6px;}
+.icon-btn{
+  background:var(--ivory); border:1px solid var(--line); width:38px; height:38px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center; font-size:1rem; color:var(--brown);
+  transition:transform .25s ease, background .25s ease;
+}
+.icon-btn:hover{transform:translateY(-1px); background:var(--beige);}
+
+/* ============================= VIEWS ============================= */
+.view{display:none; padding:10px 0 90px 0; animation:settle .5s ease;}
+.view.active{display:block;}
+@keyframes settle{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+
+/* ============================= HOME / HOUSE ============================= */
+.hero{text-align:center; padding:36px 0 8px 0;}
+.hero h1{font-size:clamp(2.3rem, 6vw, 3.3rem); margin-bottom:.15em;}
+.hero .tagline{font-family:var(--font-body); font-style:italic; color:var(--brown-soft); font-size:1.08rem; max-width:420px; margin:0 auto 1.1em auto;}
+.hero .invite{font-family:var(--font-hand); font-size:1.6rem; color:var(--clay); margin-bottom:.2em;}
+
+.house-scene{position:relative; max-width:560px; margin:18px auto 6px auto;}
+.house-scene svg{width:100%; height:auto; display:block;}
+
+.weather-panel{max-width:560px; margin:26px auto 44px auto; text-align:center;}
+.weather-panel h2{font-size:1.15rem; margin-bottom:.15em;}
+.weather-note{color:var(--brown-soft); font-size:.92rem; margin-bottom:14px;}
+.weather-row{display:flex; flex-wrap:wrap; gap:8px; justify-content:center;}
+.weather-btn{
+  background:var(--ivory); border:1px solid var(--line); border-radius:999px; padding:9px 14px;
+  font-size:.92rem; color:var(--brown); display:flex; align-items:center; gap:6px;
+  transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+.weather-btn:hover{transform:translateY(-2px); box-shadow:var(--shadow-soft);}
+.weather-btn.active{background:var(--beige); border-color:var(--beige-deep); font-weight:600;}
+.weather-response{margin-top:14px; font-family:var(--font-hand); font-size:1.25rem; color:var(--brown-soft); min-height:1.4em;}
+
+.rooms-grid{
+  max-width:900px; margin:10px auto 30px auto; display:grid;
+  grid-template-columns:repeat(5, 1fr); gap:14px;
+}
+.room-tile{
+  background:var(--ivory); border:1px solid var(--line); border-radius:var(--radius-m);
+  padding:20px 12px 16px 12px; text-align:center; position:relative; overflow:hidden;
+  transition:transform .28s ease, box-shadow .28s ease;
+}
+.room-tile:hover, .room-tile:focus-visible{transform:translateY(-4px); box-shadow:var(--shadow-soft);}
+.room-tile .glyph{font-size:1.9rem; display:block; margin-bottom:8px;}
+.room-tile .room-name{font-family:var(--font-display); font-size:.98rem; color:var(--brown); display:block; margin-bottom:4px;}
+.room-tile .room-hover{
+  font-family:var(--font-hand); font-size:1.05rem; color:var(--clay); opacity:0; height:0; overflow:hidden;
+  transition:opacity .25s ease;
+}
+.room-tile:hover .room-hover, .room-tile:focus-visible .room-hover{opacity:1; height:auto;}
+
+.discover-row{text-align:center; margin:8px 0 40px 0;}
+.pill-btn{
+  background:var(--beige); border:1px solid var(--beige-deep); border-radius:999px; padding:10px 20px;
+  font-size:.92rem; color:var(--brown); transition:transform .2s ease;
+}
+.pill-btn:hover{transform:translateY(-2px);}
+
+/* ============================= WEATHER ATMOSPHERE ============================= */
+.atmos-layer{position:absolute; inset:0; pointer-events:none; z-index:1; overflow:hidden;}
+.sun-glow{position:absolute; top:-60px; right:12%; width:220px; height:220px; border-radius:50%;
+  background:radial-gradient(circle, rgba(217,182,92,0.55), transparent 70%); opacity:0; transition:opacity .8s ease;}
+.cloud-shape{position:absolute; background:rgba(255,255,255,0.5); border-radius:50%; filter:blur(1px); opacity:0; transition:opacity .8s ease;}
+.fog-layer{position:absolute; inset:0; background:linear-gradient(to top, rgba(230,225,215,0.55), transparent 60%); opacity:0; transition:opacity .8s ease;}
+.rain-layer{position:absolute; inset:0; opacity:0; transition:opacity .8s ease; background-repeat:repeat; background-size:3px 100px;
+  background-image:linear-gradient(to bottom, transparent, rgba(119,145,163,0.35));}
+.stars-layer{position:absolute; inset:0; opacity:0; transition:opacity .8s ease;}
+.moon-shape{position:absolute; top:24px; right:16%; width:46px; height:46px; border-radius:50%;
+  background:#F3ECD8; box-shadow:0 0 26px 6px rgba(243,236,216,0.4); opacity:0; transition:opacity .8s ease;}
+
+body[data-weather="sunny"] .sun-glow{opacity:1;}
+body[data-weather="cloudy"] .cloud-shape{opacity:1;}
+body[data-weather="foggy"] .fog-layer{opacity:1;}
+body[data-weather="rainy"] .rain-layer{opacity:.5;}
+body[data-weather="stormy"] .rain-layer{opacity:.75;}
+body[data-weather="stormy"] .fog-layer{opacity:.3;}
+body[data-weather="quiet"] .stars-layer, body[data-weather="quiet"] .moon-shape{opacity:.7;}
+body[data-weather="clearing"] .sun-glow{opacity:.6;}
+body[data-weather="clearing"] .cloud-shape{opacity:.4;}
+html.night-mode .stars-layer, html.night-mode .moon-shape{opacity:.9 !important;}
+
+.lightning-flash{position:absolute; inset:0; background:rgba(255,255,255,0.55); opacity:0;}
+.lightning-flash.flash{animation:flashPulse 700ms ease;}
+@keyframes flashPulse{ 0%{opacity:0;} 8%{opacity:.9;} 16%{opacity:0;} 24%{opacity:.5;} 100%{opacity:0;} }
+
+/* ============================= SECTION HEADERS ============================= */
+.section-head{text-align:center; max-width:520px; margin:0 auto 30px auto;}
+.section-head .kicker{font-family:var(--font-hand); font-size:1.3rem; color:var(--clay); display:block; margin-bottom:2px;}
+.section-head h2{font-size:1.9rem;}
+.section-head p{color:var(--brown-soft);}
+
+/* ============================= LETTERS ============================= */
+.letter-desk{max-width:640px; margin:0 auto;}
+.letter-field-row{display:flex; align-items:baseline; gap:10px; margin-bottom:18px; font-family:var(--font-hand); font-size:1.3rem; color:var(--brown);}
+.letter-field-row input{
+  flex:1; border:none; border-bottom:1.5px dashed var(--line); background:transparent;
+  font-family:var(--font-hand); font-size:1.3rem; color:var(--brown); padding:4px 6px; min-width:0;
+}
+.letter-field-row input:focus{outline:none; border-bottom-color:var(--dusty-blue);}
+.paper-sheet{
+  background:var(--ivory); border-radius:var(--radius-m); box-shadow:var(--shadow-paper);
+  padding:30px 28px; position:relative;
+  background-image:repeating-linear-gradient(to bottom, transparent 0 38px, var(--line) 38px 39px);
+}
+.paper-sheet textarea{
+  width:100%; min-height:280px; border:none; background:transparent; resize:vertical;
+  font-family:var(--font-body); font-size:1.05rem; line-height:39px; color:var(--ink);
+}
+.paper-sheet textarea:focus{outline:none;}
+.char-count{text-align:right; font-size:.78rem; color:var(--warm-gray); margin-top:6px; min-height:1em;}
+.letter-actions{display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:22px;}
+.btn{
+  border-radius:999px; padding:12px 22px; font-size:.95rem; border:1px solid transparent;
+  transition:transform .2s ease, box-shadow .2s ease;
+}
+.btn:hover{transform:translateY(-2px);}
+.btn-quiet{background:var(--ivory); border-color:var(--line); color:var(--brown);}
+.btn-warm{background:var(--sage); color:#fff;}
+.btn-outline{background:transparent; border-color:var(--brown-soft); color:var(--brown-soft);}
+.btn-danger{background:transparent; border-color:var(--clay); color:var(--clay);}
+.letter-links{text-align:center; margin-top:16px; font-size:.9rem;}
+.form-msg{text-align:center; margin-top:14px; font-family:var(--font-hand); font-size:1.15rem; color:var(--sage); min-height:1.4em;}
+
+/* ============================= MY LETTERS ============================= */
+.search-row{max-width:420px; margin:0 auto 26px auto; position:relative;}
+.search-row input{
+  width:100%; padding:11px 16px; border-radius:999px; border:1px solid var(--line); background:var(--ivory);
+  font-family:var(--font-body); font-size:.95rem; color:var(--ink);
+}
+.letters-list{max-width:640px; margin:0 auto; display:flex; flex-direction:column; gap:12px;}
+.letter-row{
+  background:var(--ivory); border:1px solid var(--line); border-radius:var(--radius-s);
+  padding:14px 16px; display:flex; align-items:center; justify-content:space-between; gap:12px;
+  cursor:pointer; transition:box-shadow .2s ease;
+}
+.letter-row:hover{box-shadow:var(--shadow-soft);}
+.letter-row .lr-meta{font-size:.9rem; color:var(--brown-soft);}
+.letter-row .lr-to{font-family:var(--font-display); color:var(--brown); font-size:1.02rem;}
+.empty-note{text-align:center; color:var(--brown-soft); font-family:var(--font-hand); font-size:1.2rem; padding:30px 0;}
+.local-note{max-width:520px; margin:30px auto 0 auto; text-align:center; font-size:.85rem; color:var(--warm-gray);}
+
+/* ============================= LIVING ROOM ============================= */
+.category-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(150px,1fr)); gap:10px; max-width:920px; margin:0 auto 34px auto;}
+.category-chip{
+  background:var(--ivory); border:1px solid var(--line); border-radius:var(--radius-s);
+  padding:12px 10px; text-align:left; transition:transform .2s ease, box-shadow .2s ease;
+}
+.category-chip:hover, .category-chip.active{transform:translateY(-2px); box-shadow:var(--shadow-soft); border-color:var(--beige-deep);}
+.category-chip .cc-icon{font-size:1.2rem;}
+.category-chip .cc-name{display:block; font-family:var(--font-display); font-size:.95rem; color:var(--brown); margin-top:4px;}
+
+.paper-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(240px,1fr)); gap:22px; max-width:960px; margin:0 auto;}
+.letter-card{
+  background:var(--ivory); border-radius:4px; box-shadow:var(--shadow-paper); padding:20px 18px 16px 18px;
+  position:relative;
+}
+.letter-card:nth-child(3n+1){transform:rotate(-0.6deg);}
+.letter-card:nth-child(3n+2){transform:rotate(0.5deg);}
+.letter-card:nth-child(3n){transform:rotate(-0.3deg);}
+.letter-card .lc-to{font-family:var(--font-hand); font-size:1.25rem; color:var(--brown); margin-bottom:6px;}
+.letter-card .lc-body{font-size:.96rem; color:var(--ink); margin-bottom:10px;}
+.letter-card .lc-from{font-family:var(--font-hand); font-size:1.05rem; color:var(--brown-soft); text-align:right;}
+.letter-card .lc-tag{
+  display:inline-block; font-size:.72rem; text-transform:lowercase; letter-spacing:.02em;
+  background:var(--beige); color:var(--brown-soft); padding:2px 9px; border-radius:999px; margin-bottom:10px;
+}
+.letter-card .lc-mine{
+  position:absolute; top:14px; right:14px; font-size:.7rem; color:var(--sage); font-family:var(--font-hand); font-size:1rem;
+}
+.suggest-box{max-width:520px; margin:50px auto 0 auto; padding-top:30px; border-top:1px solid var(--line);}
+.suggest-box h3{text-align:center;}
+.suggest-box p.hint{text-align:center; color:var(--brown-soft); font-size:.92rem;}
+.suggest-box input, .suggest-box textarea{
+  width:100%; padding:10px 12px; border-radius:var(--radius-s); border:1px solid var(--line); background:var(--ivory);
+  font-family:var(--font-body); margin-bottom:10px; font-size:.95rem; color:var(--ink);
+}
+.suggest-box textarea{min-height:70px; resize:vertical;}
+
+/* ============================= WINDOW ============================= */
+.question-list{max-width:700px; margin:0 auto; display:flex; flex-direction:column; gap:10px;}
+.q-card{background:var(--ivory); border:1px solid var(--line); border-radius:var(--radius-m); overflow:hidden;}
+.q-trigger{
+  width:100%; background:transparent; border:none; text-align:left; padding:18px 20px;
+  display:flex; justify-content:space-between; align-items:center; gap:10px;
+  font-family:var(--font-display); font-size:1.05rem; color:var(--brown);
+}
+.q-trigger .chev{transition:transform .3s ease; color:var(--brown-soft);}
+.q-card.open .q-trigger .chev{transform:rotate(90deg);}
+.q-body{max-height:0; overflow:hidden; transition:max-height .4s ease;}
+.q-card.open .q-body{max-height:2400px;}
+.q-inner{padding:0 20px 22px 20px;}
+.tier-tabs{display:flex; gap:6px; margin-bottom:14px; flex-wrap:wrap;}
+.tier-tab{background:var(--beige); border:1px solid transparent; border-radius:999px; padding:6px 13px; font-size:.85rem; color:var(--brown-soft);}
+.tier-tab.active{background:var(--sage); color:#fff;}
+.tier-pane{display:none; font-size:.96rem;}
+.tier-pane.active{display:block;}
+.tier-pane p:last-child{margin-bottom:0;}
+.q-tags{margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;}
+.q-tag{font-size:.78rem; background:var(--beige); color:var(--brown-soft); padding:3px 10px; border-radius:999px;}
+
+/* ============================= SHELF ============================= */
+.shelf-section{max-width:920px; margin:0 auto 46px auto;}
+.shelf-section h3{margin-bottom:4px;}
+.shelf-section .shelf-sub{color:var(--brown-soft); font-size:.9rem; margin-bottom:16px;}
+.shelf-row{display:flex; gap:10px; align-items:flex-end; padding-bottom:14px; border-bottom:6px solid var(--beige-deep); flex-wrap:wrap;}
+.book-spine{
+  width:56px; min-height:190px; border-radius:4px 4px 2px 2px; display:flex; align-items:flex-end; justify-content:center;
+  padding:14px 0; box-shadow:2px 0 4px rgba(0,0,0,0.08) inset, var(--shadow-paper);
+  transition:transform .2s ease;
+}
+.book-spine:hover, .book-spine:focus-visible{transform:translateY(-8px);}
+.book-spine span{writing-mode:vertical-rl; transform:rotate(180deg); font-family:var(--font-display); font-size:.86rem; color:#fff; letter-spacing:.02em;}
+.research-list{display:flex; flex-direction:column; gap:16px; max-width:760px; margin:0 auto;}
+.research-card{background:var(--ivory); border:1px solid var(--line); border-radius:var(--radius-m); padding:20px;}
+.research-card .rc-meta{font-size:.82rem; color:var(--warm-gray); margin-top:8px;}
+
+/* ============================= EMOTIONS ============================= */
+.emotion-grid{display:flex; flex-wrap:wrap; gap:10px; justify-content:center; max-width:820px; margin:0 auto 26px auto;}
+.emo-chip{
+  background:var(--ivory); border:1px solid var(--line); border-radius:999px; padding:10px 18px;
+  font-family:var(--font-display); font-size:.98rem; color:var(--brown); transition:transform .2s ease, background .2s ease;
+}
+.emo-chip:hover, .emo-chip.active{background:var(--lavender); color:#fff; transform:translateY(-2px);}
+.emo-detail{max-width:640px; margin:0 auto; background:var(--ivory); border-radius:var(--radius-m); padding:24px; box-shadow:var(--shadow-soft); min-height:80px;}
+.emo-related{display:flex; flex-wrap:wrap; gap:8px; margin:14px 0;}
+.emo-related button{background:var(--beige); border:none; border-radius:999px; padding:6px 13px; font-size:.86rem; color:var(--brown);}
+.emo-links{display:flex; flex-wrap:wrap; gap:8px; margin-top:16px;}
+.emo-links button{background:transparent; border:1px solid var(--line); border-radius:999px; padding:6px 13px; font-size:.82rem; color:var(--brown-soft);}
+.emotion-footer{text-align:center; font-family:var(--font-hand); font-size:1.2rem; color:var(--brown-soft); margin-top:30px;}
+
+/* ============================= NIGHT LIGHT ============================= */
+#view-nightlight{min-height:78vh; display:none; flex-direction:column; align-items:center; justify-content:center; text-align:center; position:relative;}
+#view-nightlight.active{display:flex;}
+.nl-lamp{font-size:2.6rem; margin-bottom:10px;}
+.nl-copy{max-width:420px;}
+.nl-copy h2{font-family:var(--font-hand); font-weight:600; font-size:2rem; color:var(--brown);}
+.nl-actions{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; max-width:520px; margin:26px auto 0 auto;}
+.nl-actions button{
+  background:rgba(255,255,255,0.06); border:1px solid var(--line); border-radius:var(--radius-s);
+  padding:14px 10px; color:var(--brown); font-size:.86rem; display:flex; flex-direction:column; gap:6px; align-items:center;
+}
+html.night-mode .nl-actions button{color:var(--brown);}
+.nl-actions button:hover{background:var(--beige);}
+.nl-reveal{max-width:520px; margin:26px auto 0 auto; background:var(--ivory); border-radius:var(--radius-m); padding:20px; text-align:left; box-shadow:var(--shadow-soft); display:none;}
+.nl-reveal.show{display:block;}
+.twinkle{position:absolute; width:3px; height:3px; background:#F3ECD8; border-radius:50%; opacity:.7; animation:twinkle 3.4s ease-in-out infinite;}
+@keyframes twinkle{ 0%,100%{opacity:.25;} 50%{opacity:.9;} }
+
+/* ============================= FOOTER ============================= */
+footer.site-footer{border-top:1px solid var(--line); padding:40px 0 30px 0; margin-top:40px;}
+.footer-inner{max-width:1020px; margin:0 auto; padding:0 22px; text-align:center;}
+.footer-inner .fmark{font-family:var(--font-display); font-size:1.1rem; color:var(--brown);}
+.footer-inner .ftag{font-style:italic; color:var(--brown-soft); font-size:.9rem; margin-bottom:16px;}
+.footer-links{display:flex; flex-wrap:wrap; gap:16px; justify-content:center; margin-bottom:16px; font-size:.88rem;}
+.footer-links button{background:none; border:none; color:var(--brown-soft); text-decoration:underline; padding:2px;}
+.footer-disclaimer{font-size:.78rem; color:var(--warm-gray); max-width:480px; margin:0 auto;}
+
+/* ============================= MODAL ============================= */
+.modal-overlay{
+  position:fixed; inset:0; background:rgba(62,50,38,0.45); backdrop-filter:blur(2px);
+  display:none; align-items:flex-start; justify-content:center; z-index:100; padding:6vh 16px;
+  overflow-y:auto;
+}
+.modal-overlay.show{display:flex;}
+.modal-box{
+  background:var(--ivory); border-radius:var(--radius-m); max-width:600px; width:100%;
+  padding:32px 30px 28px 30px; box-shadow:var(--shadow-soft); position:relative; animation:settle .35s ease;
+}
+.modal-close{position:absolute; top:14px; right:14px; background:var(--beige); border:none; width:32px; height:32px; border-radius:50%; font-size:1rem; color:var(--brown);}
+.modal-box h2{margin-bottom:.5em;}
+.modal-box ul{padding-left:1.2em;}
+.modal-box li{margin-bottom:.5em;}
+
+/* ============================= SEARCH PANEL ============================= */
+.search-overlay{position:fixed; inset:0; background:rgba(62,50,38,0.4); display:none; z-index:90; padding:8vh 16px; overflow-y:auto;}
+.search-overlay.show{display:block;}
+.search-panel{max-width:600px; margin:0 auto; background:var(--ivory); border-radius:var(--radius-m); padding:26px; box-shadow:var(--shadow-soft);}
+.search-panel input{width:100%; padding:12px 16px; border-radius:999px; border:1px solid var(--line); font-size:1rem; font-family:var(--font-body); background:var(--cream); color:var(--ink);}
+.search-results{margin-top:18px; display:flex; flex-direction:column; gap:14px; max-height:52vh; overflow-y:auto;}
+.sr-group h4{font-size:.82rem; text-transform:lowercase; color:var(--warm-gray); margin-bottom:6px; font-family:var(--font-body); font-weight:600;}
+.sr-item{display:block; width:100%; text-align:left; background:transparent; border:none; border-bottom:1px solid var(--line); padding:9px 2px; color:var(--ink); font-size:.94rem;}
+.sr-item:hover{color:var(--dusty-blue);}
+
+/* ============================= RESPONSIVE ============================= */
+@media (max-width:760px){
+  nav.room-nav{display:none;}
+  .rooms-grid{grid-template-columns:repeat(3,1fr);}
+  .header-row{justify-content:space-between;}
+}
+@media (max-width:520px){
+  .rooms-grid{grid-template-columns:repeat(2,1fr);}
+  .nl-actions{grid-template-columns:repeat(2,1fr);}
+  .paper-sheet{padding:22px 16px;}
+  .letter-field-row{font-size:1.1rem;}
+}
+</style>
+</head>
+<body data-weather="sunny">
+<a class="skip-link" href="#main-content">Skip to content</a>
+
+<div class="sky-wrap">
+<div class="atmos-layer" aria-hidden="true">
+  <div class="sun-glow"></div>
+  <div class="cloud-shape" style="width:140px;height:50px;top:40px;left:8%;"></div>
+  <div class="cloud-shape" style="width:100px;height:40px;top:80px;left:60%;"></div>
+  <div class="fog-layer"></div>
+  <div class="rain-layer"></div>
+  <div class="stars-layer" id="starsLayer"></div>
+  <div class="moon-shape"></div>
+  <div class="lightning-flash" id="lightningFlash"></div>
+</div>
+
+<div id="app">
+
+<header class="site-header">
+  <div class="header-row">
+    <button class="brand" onclick="navigate('home')" aria-label="somewhere soft — go home">
+      <span class="brand-mark">somewhere soft</span><small>a little place</small>
+    </button>
+    <nav class="room-nav" aria-label="Rooms in the house">
+      <button data-nav="letters" onclick="navigate('letters')">💌 letters</button>
+      <button data-nav="livingroom" onclick="navigate('livingroom')">🛋️ living room</button>
+      <button data-nav="window" onclick="navigate('window')">🪟 the window</button>
+      <button data-nav="shelf" onclick="navigate('shelf')">📚 the shelf</button>
+      <button data-nav="emotions" onclick="navigate('emotions')">🫧 emotions</button>
+    </nav>
+    <div class="header-tools">
+      <button class="icon-btn" aria-label="Look for something" onclick="openSearch()" title="look for something">🔎</button>
+      <button class="icon-btn" aria-label="Toggle the night light" onclick="toggleNightMode()" title="the night light">🌙</button>
+      <button class="icon-btn" aria-label="Toggle reduced motion" onclick="toggleReduceMotion()" id="motionBtn" title="reduce motion">✨</button>
+    </div>
+  </div>
+</header>
+
+<main id="main-content">
+<div class="wrap-wide">
+
+<!-- ============================= HOME ============================= -->
+<section id="view-home" class="view active" aria-label="Home">
+  <div class="hero">
+    <h1>somewhere soft</h1>
+    <p class="tagline">a little place for the things we don't know how to say.</p>
+    <p class="invite">come in. stay for a while.</p>
+  </div>
+
+  <div class="house-scene">
+    <svg viewBox="0 0 500 340" role="img" aria-label="A small illustrated cottage with a glowing window, a chimney, and a garden">
+      <ellipse cx="250" cy="322" rx="220" ry="14" fill="var(--beige)" opacity="0.6"/>
+      <polygon points="250,60 90,170 410,170" fill="var(--clay)" opacity="0.85"/>
+      <rect x="110" y="170" width="280" height="140" rx="4" fill="var(--ivory)" stroke="var(--line)"/>
+      <rect x="232" y="72" width="16" height="46" fill="var(--brown-soft)"/>
+      <ellipse cx="240" cy="60" rx="10" ry="14" fill="var(--warm-gray)" opacity="0.5"/>
+      <rect x="150" y="200" width="52" height="52" rx="4" fill="var(--dusty-blue)" opacity="0.35" stroke="var(--brown-soft)"/>
+      <rect x="150" y="200" width="52" height="52" rx="4" fill="none" stroke="var(--brown)" stroke-width="1.5"/>
+      <line x1="176" y1="200" x2="176" y2="252" stroke="var(--brown)" stroke-width="1"/>
+      <line x1="150" y1="226" x2="202" y2="226" stroke="var(--brown)" stroke-width="1"/>
+      <rect x="298" y="200" width="52" height="52" rx="4" fill="var(--faded-yellow)" opacity="0.55" stroke="var(--brown)" stroke-width="1.5"/>
+      <line x1="324" y1="200" x2="324" y2="252" stroke="var(--brown)" stroke-width="1"/>
+      <line x1="298" y1="226" x2="350" y2="226" stroke="var(--brown)" stroke-width="1"/>
+      <rect x="228" y="230" width="44" height="80" rx="2" fill="var(--brown-soft)"/>
+      <circle cx="264" cy="270" r="2.5" fill="var(--ivory)"/>
+      <ellipse cx="80" cy="300" rx="20" ry="10" fill="var(--sage)" opacity="0.7"/>
+      <ellipse cx="420" cy="300" rx="20" ry="10" fill="var(--sage)" opacity="0.7"/>
+      <rect x="72" y="270" width="6" height="34" fill="var(--sage)"/>
+      <rect x="412" y="270" width="6" height="34" fill="var(--sage)"/>
+    </svg>
+  </div>
+
+  <div class="weather-panel">
+    <h2>what's the weather like inside?</h2>
+    <p class="weather-note">you don't have to explain it.</p>
+    <div class="weather-row" role="group" aria-label="Choose the weather inside you today">
+      <button class="weather-btn" data-w="sunny" onclick="setWeather('sunny')">☀️ sunny</button>
+      <button class="weather-btn" data-w="cloudy" onclick="setWeather('cloudy')">🌤️ cloudy</button>
+      <button class="weather-btn" data-w="rainy" onclick="setWeather('rainy')">🌧️ rainy</button>
+      <button class="weather-btn" data-w="stormy" onclick="setWeather('stormy')">⛈️ stormy</button>
+      <button class="weather-btn" data-w="foggy" onclick="setWeather('foggy')">🌫️ foggy</button>
+      <button class="weather-btn" data-w="quiet" onclick="setWeather('quiet')">🌙 quiet</button>
+      <button class="weather-btn" data-w="clearing" onclick="setWeather('clearing')">🌈 clearing</button>
+    </div>
+    <p class="weather-response" id="weatherResponse" aria-live="polite"></p>
+  </div>
+
+  <div class="rooms-grid">
+    <button class="room-tile" onclick="navigate('letters')">
+      <span class="glyph" aria-hidden="true">💌</span>
+      <span class="room-name">Letters to the Mind</span>
+      <span class="room-hover" aria-hidden="true">write something</span>
+    </button>
+    <button class="room-tile" onclick="navigate('livingroom')">
+      <span class="glyph" aria-hidden="true">🛋️</span>
+      <span class="room-name">The Living Room</span>
+      <span class="room-hover" aria-hidden="true">sit for a while</span>
+    </button>
+    <button class="room-tile" onclick="navigate('window')">
+      <span class="glyph" aria-hidden="true">🪟</span>
+      <span class="room-name">The Window</span>
+      <span class="room-hover" aria-hidden="true">wonder why?</span>
+    </button>
+    <button class="room-tile" onclick="navigate('shelf')">
+      <span class="glyph" aria-hidden="true">📚</span>
+      <span class="room-name">The Shelf</span>
+      <span class="room-hover" aria-hidden="true">look through the shelf</span>
+    </button>
+    <button class="room-tile" onclick="toggleNightMode()">
+      <span class="glyph" aria-hidden="true">🌙</span>
+      <span class="room-name">The Night Light</span>
+      <span class="room-hover" aria-hidden="true">turn it down</span>
+    </button>
+  </div>
+
+  <div class="discover-row">
+    <button class="pill-btn" onclick="randomDiscovery()">🎲 show me something</button>
+  </div>
+</section>
+
+<!-- ============================= LETTERS ============================= -->
+<section id="view-letters" class="view" aria-label="Letters to the Mind">
+  <div class="section-head">
+    <span class="kicker">Letters to the Mind</span>
+    <h2>say the thing you don't know how to say.</h2>
+    <p>write to anyone. yourself, your past, someone you miss, no one in particular. no account, no names required.</p>
+  </div>
+  <div class="letter-desk">
+    <div class="letter-field-row">
+      <label for="letterTo">to:</label>
+      <input type="text" id="letterTo" placeholder="anyone" maxlength="80">
+    </div>
+    <div class="paper-sheet">
+      <label for="letterBody" class="visually-hidden">Your letter</label>
+      <textarea id="letterBody" placeholder="write whatever you need to say..." maxlength="10000" oninput="updateCharCount()"></textarea>
+    </div>
+    <p class="char-count" id="charCount"></p>
+    <div class="letter-field-row" style="justify-content:flex-end;">
+      <label for="letterFrom">from:</label>
+      <input type="text" id="letterFrom" placeholder="someone" maxlength="80">
+    </div>
+    <div class="letter-actions">
+      <button class="btn btn-quiet" onclick="saveLetterPrivate()">🔒 keep private</button>
+      <button class="btn btn-warm" onclick="openShareModal()">🛋️ share anonymously</button>
+      <button class="btn btn-outline" onclick="clearLetterForm()">write another</button>
+    </div>
+    <p class="form-msg" id="letterMsg" aria-live="polite"></p>
+    <p class="letter-links"><button onclick="navigate('myletters')" style="background:none;border:none;color:var(--dusty-blue);text-decoration:underline;">your letters →</button></p>
+  </div>
+</section>
+
+<!-- ============================= MY LETTERS ============================= -->
+<section id="view-myletters" class="view" aria-label="My Letters">
+  <div class="section-head">
+    <span class="kicker">My Letters</span>
+    <h2>the ones you've kept.</h2>
+  </div>
+  <div class="search-row">
+    <input type="search" id="myLettersSearch" placeholder="look for something — try a name" oninput="renderMyLetters()" aria-label="Search your letters">
+  </div>
+  <div class="letters-list" id="myLettersList"></div>
+  <p class="local-note">these letters live only in this browser, on this device. clearing your browser data will erase them — export any you want to keep.</p>
+  <div style="text-align:center; margin-top:18px;">
+    <button class="btn btn-outline" onclick="clearAllLetters()">clear all my letters</button>
+  </div>
+</section>
+
+<!-- ============================= LIVING ROOM ============================= -->
+<section id="view-livingroom" class="view" aria-label="The Living Room">
+  <div class="section-head">
+    <span class="kicker">The Living Room</span>
+    <h2>sit for a while.</h2>
+    <p>someone else has felt something like this too.</p>
+  </div>
+  <div class="category-grid" id="categoryGrid"></div>
+  <div class="paper-grid" id="livingRoomGrid"></div>
+
+  <div class="suggest-box">
+    <h3>suggest a collection</h3>
+    <p class="hint">have an idea for a shared theme, like "things I don't know how to say" or "letters to people I miss"? public collections are reviewed before they go live.</p>
+    <input type="text" id="collectionTitle" placeholder="a title for the collection">
+    <textarea id="collectionDesc" placeholder="what would live here?"></textarea>
+    <div style="text-align:center;">
+      <button class="btn btn-quiet" onclick="suggestCollection()">leave it here</button>
+    </div>
+    <p class="form-msg" id="collectionMsg" aria-live="polite"></p>
+  </div>
+</section>
+
+<!-- ============================= WINDOW ============================= -->
+<section id="view-window" class="view" aria-label="The Window">
+  <div class="section-head">
+    <span class="kicker">The Window</span>
+    <h2>why do I feel this way?</h2>
+    <p>emotions usually come from many things working together — memory, environment, biology, other people. rarely just one.</p>
+  </div>
+  <div class="question-list" id="questionList"></div>
+</section>
+
+<!-- ============================= SHELF ============================= -->
+<section id="view-shelf" class="view" aria-label="The Shelf">
+  <div class="section-head">
+    <span class="kicker">The Shelf</span>
+    <h2>look through the shelf.</h2>
+    <p>a small library on the brain, the mind, and being human. pick a book.</p>
+  </div>
+  <div id="shelfSections"></div>
+  <div class="shelf-section">
+    <h3>🔬 research</h3>
+    <p class="shelf-sub">longer pieces, closer to the source material.</p>
+    <div class="research-list" id="researchList"></div>
+  </div>
+</section>
+
+<!-- ============================= EMOTIONS ============================= -->
+<section id="view-emotions" class="view" aria-label="Emotion Explorer">
+  <div class="section-head">
+    <span class="kicker">Emotion Explorer</span>
+    <h2>what are you carrying?</h2>
+    <p>feelings tend to travel in groups. pick one that's close, even if it isn't exact.</p>
+  </div>
+  <div class="emotion-grid" id="emotionGrid"></div>
+  <div class="emo-detail" id="emotionDetail">
+    <p style="text-align:center;color:var(--warm-gray);">choose a word above to begin.</p>
+  </div>
+  <p class="emotion-footer">feelings don't always fit neatly into one word.</p>
+</section>
+
+<!-- ============================= NIGHT LIGHT ============================= -->
+<section id="view-nightlight" aria-label="The Night Light">
+  <div class="twinkle" style="top:18%;left:20%;"></div>
+  <div class="twinkle" style="top:26%;left:70%; animation-delay:1s;"></div>
+  <div class="twinkle" style="top:12%;left:50%; animation-delay:2s;"></div>
+  <div class="twinkle" style="top:34%;left:34%; animation-delay:1.6s;"></div>
+  <div class="nl-lamp" aria-hidden="true">🕯️</div>
+  <div class="nl-copy">
+    <h2>it's late.</h2>
+    <p>you don't have to figure everything out tonight.</p>
+  </div>
+  <div class="nl-actions">
+    <button onclick="nlWrite()"><span>💌</span>write</button>
+    <button onclick="nlRead()"><span>📖</span>read</button>
+    <button onclick="nlWonder()"><span>🧠</span>wonder</button>
+    <button onclick="nlCheckIn()"><span>🌧️</span>check in</button>
+    <button onclick="randomDiscovery()"><span>🎲</span>show me something</button>
+    <button onclick="nlJustStay()"><span>🕯️</span>just stay</button>
+  </div>
+  <div class="nl-reveal" id="nlReveal"></div>
+  <p style="margin-top:26px;"><button class="btn btn-outline" onclick="exitNightMode()">leave the light on, head home</button></p>
+</section>
+
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="fmark">somewhere soft</div>
+    <p class="ftag">a little place for the things we don't know how to say.</p>
+    <div class="footer-links">
+      <button onclick="openModal('about')">about</button>
+      <button onclick="openModal('privacy')">privacy</button>
+      <button onclick="openModal('guidelines')">community guidelines</button>
+      <button onclick="openModal('research')">research &amp; sources</button>
+      <button onclick="openModal('help')">need help?</button>
+      <button onclick="openModal('credits')">credits</button>
+    </div>
+    <p class="footer-disclaimer">somewhere soft is an educational and reflective space. it is not therapy, diagnosis, or crisis care, and it isn't a substitute for professional mental-health support.</p>
+  </div>
+</footer>
+
+</div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this) closeModal()">
+  <div class="modal-box" role="dialog" aria-modal="true" id="modalBox">
+    <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<div class="search-overlay" id="searchOverlay" onclick="if(event.target===this) closeSearch()">
+  <div class="search-panel">
+    <input type="search" id="searchInput" placeholder="look for something — a feeling, a question, a word" oninput="runSearch()" aria-label="Search somewhere soft">
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</div>
+
+<script>
+/* ================================================================
+   DATA
+   ================================================================ */
+const CATEGORIES = [
+  {id:'loneliness', icon:'🌧️', name:'Loneliness', blurb:'feeling alone, even in a crowd'},
+  {id:'yearning', icon:'💌', name:'Yearning', blurb:'missing, wanting, longing for'},
+  {id:'nostalgia', icon:'🕰️', name:'Nostalgia', blurb:'old places, old selves'},
+  {id:'growingup', icon:'🌱', name:'Growing Up', blurb:'changing, outgrowing, becoming'},
+  {id:'belonging', icon:'🫂', name:'Belonging', blurb:'finding your people'},
+  {id:'identity', icon:'🪞', name:'Identity', blurb:'figuring yourself out'},
+  {id:'pressure', icon:'📚', name:'Pressure', blurb:'expectations, comparison'},
+  {id:'confusion', icon:'🌫️', name:'Confusion', blurb:'not knowing what you feel'},
+  {id:'losschange', icon:'💔', name:'Loss & Change', blurb:'endings, letting go'},
+  {id:'hope', icon:'☀️', name:'Hope', blurb:'small victories, new starts'},
+  {id:'quietthoughts', icon:'🌙', name:'Quiet Thoughts', blurb:'late-night, unfiled feelings'},
+];
+
+const CURATED_LETTERS = [
+  {id:'c1', cat:'loneliness', to:'Anyone still awake', from:'A room with the lights off', body:"I'm surrounded by people almost every hour of the day and I still come home and feel like no one actually knows me. Not the real version. I don't even know if I'd know how to show them. I just wanted to write that down somewhere it wouldn't be weird."},
+  {id:'c2', cat:'loneliness', to:'The group chat', from:'The person who stopped replying', body:"I didn't leave because I didn't care. I left because I got tired of feeling like the only one trying. I still check it sometimes. I miss being included without having to ask to be."},
+  {id:'c3', cat:'yearning', to:'The summer we had', from:'Someone who keeps checking the weather', body:"I don't think I'm in love with a person anymore. I think I'm in love with a version of a Tuesday that doesn't exist anymore — the porch, the bad music, all of us pretending we had time. I know we didn't."},
+  {id:'c4', cat:'yearning', to:'You (you know who)', from:'Nobody in particular', body:"I'm not asking for anything. I just wanted to say it existed, even if only on my side. Some things don't need to go anywhere to have mattered."},
+  {id:'c5', cat:'nostalgia', to:"My mom's old kitchen", from:'Someone who grew up', body:"The floor creaked in the same spot every time. I didn't know I'd miss a sound. I'd give a lot to stand in that kitchen for five minutes and not have anywhere to be."},
+  {id:'c6', cat:'nostalgia', to:'The friends from third grade', from:'A name you probably forgot', body:"We built an entire country out of a sandbox once. I still think about it sometimes — how sure we were that we'd know each other forever."},
+  {id:'c7', cat:'growingup', to:'14-year-old me', from:"The person you're turning into", body:"You think everything is permanent right now — the friend groups, the way things feel unfair, all of it. It's not. Some of it gets easier. Some of it just gets different. I promise you keep going either way."},
+  {id:'c8', cat:'growingup', to:'My childhood bedroom', from:'Someone who is packing it up', body:"I used to think I'd live here forever, the way kids think everything is forever. Turns out growing up is just a long series of finding out things end, and somehow starting again anyway."},
+  {id:'c9', cat:'belonging', to:'The table I sit at', from:"Someone still not sure I'm supposed to be here", body:"Nobody's mean to me. I just don't fully feel like I fit, like a guest who's been invited enough times that leaving would be rude. I want to belong somewhere without having to check."},
+  {id:'c10', cat:'belonging', to:'My family', from:'The one who feels different', body:"I love you all. I also don't think you'd fully get this part of me. I don't know how to hold both of those at once yet."},
+  {id:'c11', cat:'identity', to:"Whoever I'm supposed to become", from:'Someone still figuring it out', body:"Everyone keeps asking what I want to do, who I want to be, like it's a decision I make once instead of something I find out slowly. I wish it was allowed to take longer."},
+  {id:'c12', cat:'identity', to:'The version of me other people expect', from:'The one underneath', body:"I'm tired of performing a personality that's easier for everyone else. I don't fully know what's under it yet either. I'm working on that."},
+  {id:'c13', cat:'pressure', to:'The number at the top of the page', from:'Someone who is more than it', body:"I know a grade isn't supposed to mean everything. It still feels like it does at 11pm the night before. I wish someone had told me it doesn't measure the parts of me I actually like."},
+  {id:'c14', cat:'pressure', to:'Everyone who says I have so much potential', from:'Someone exhausted by it', body:"Potential feels like a debt sometimes — like I owe someone a version of myself I haven't built yet."},
+  {id:'c15', cat:'confusion', to:'My own head', from:'Someone in it', body:"I don't even know what I'm feeling right now, just that it's a lot of things at once and none of them have names. I wanted to write that down instead of pretending I had it sorted."},
+  {id:'c16', cat:'confusion', to:'Anyone who has it figured out', from:"Someone who doesn't", body:"I nod along like I know what I want. Most days I don't. I'm hoping that's more normal than it feels."},
+  {id:'c17', cat:'losschange', to:'The friendship that just quietly ended', from:'Someone still not sure what happened', body:"We didn't fight. We just stopped. I keep almost texting you about something funny and then remembering we don't do that anymore. I miss you in this specific, unofficial way nobody warned me about."},
+  {id:'c18', cat:'losschange', to:'The house we moved out of', from:'Someone still getting used to a new one', body:"I know it's just a building. It didn't feel like just a building."},
+  {id:'c19', cat:'hope', to:'The version of me who almost gave up last spring', from:"The one who's still here", body:"I don't have some big transformation to report. Just — it got a little lighter. Not fixed. Lighter. I wanted you to know that was possible, because I didn't back then."},
+  {id:'c20', cat:'hope', to:'Tomorrow', from:'Someone trying again', body:"I don't know if it'll go well. I'm going to try anyway. That feels like enough for tonight."},
+  {id:'c21', cat:'quietthoughts', to:'2am', from:"A brain that won't turn off", body:"Why do I only think clearly about the things I'm avoiding when it's this late and everyone else is asleep. I don't have an answer. Just wanted to say it out loud, sort of."},
+  {id:'c22', cat:'quietthoughts', to:'No one, really', from:'Someone who just needed a place to put this', body:"Sometimes I don't have a point. I just have a feeling and nowhere to set it down. This is me setting it down."},
+];
+
+const WINDOW_QUESTIONS = [
+  {id:'w1', q:'Why does missing someone hurt?', tags:['yearning','belonging'],
+    simple:"Missing someone can feel like an actual ache, not just a thought — and that's not your imagination. Connection matters enough to your body that losing it, even briefly, registers the way a small injury might.",
+    psych:"Attachment research (building on the work of John Bowlby and later researchers) suggests we form real bonds with the people we're close to, and separation from an attachment figure reliably triggers distress — it's a built-in signal that something important is missing, not a sign of weakness.",
+    science:"Some brain-imaging research, including work by Naomi Eisenberger and colleagues, has found that social pain — like exclusion or separation — activates overlapping brain regions to physical pain, including the anterior cingulate cortex. Researchers are still working out exactly how much overlap there is and what it means, but the general finding — that social and physical pain share some neural territory — has been replicated in various forms."},
+  {id:'w2', q:'Why can I feel lonely even around people?', tags:['loneliness'],
+    simple:"Loneliness isn't really about how many people are in the room. It's about the gap between the connection you want and the connection you feel you're actually getting.",
+    psych:"Psychologist John Cacioppo, who spent much of his career studying loneliness, described it as a subjective state — a mismatch between desired and perceived social connection — rather than simply being alone. You can be lonely in a crowd, or content by yourself.",
+    science:"Cacioppo's research linked chronic loneliness to changes in stress-related physiology and sleep, and proposed that loneliness may have evolved as a kind of internal alarm — uncomfortable on purpose, to motivate reconnection with a social group. This is an active area of ongoing research rather than a settled, single mechanism."},
+  {id:'w3', q:'Why does growing up sometimes feel like losing something?', tags:['growingup','nostalgia'],
+    simple:"Growing up usually means gaining independence and also giving things up — routines, closeness with certain people, a simpler version of your own life. It makes sense to feel both at once.",
+    psych:"Developmental theories, like Erik Erikson's stages of psychosocial development, describe adolescence and young adulthood as a period focused on identity — trying on different versions of yourself. That process almost always involves outgrowing earlier versions, which can genuinely feel like a loss even while it's also progress.",
+    science:"Neuroscience shows the brain keeps developing well into a person's twenties, particularly regions involved in planning and self-regulation. Alongside this, autobiographical memory — how we store and revisit our own life story — becomes more organized during adolescence, which may be part of why this period leaves such a strong, remembered emotional mark."},
+  {id:'w4', q:'Why do embarrassing memories come back?', tags:['confusion','quietthoughts'],
+    simple:"Cringing over something years later doesn't mean it was actually that big a deal. It usually means your brain tagged it as socially important, so it kept resurfacing.",
+    psych:"Emotionally intense moments — especially ones involving social judgment — tend to get rehearsed and revisited more than neutral ones, a pattern sometimes discussed in psychology as part of how self-conscious emotions like embarrassment work.",
+    science:"The amygdala, involved in emotional salience, and the hippocampus, involved in memory formation, work together to make emotionally charged events more memorable than mundane ones. Memories aren't fixed in storage either — each time one is recalled it can be slightly re-consolidated, which is part of why replaying an embarrassing memory can make it feel just as vivid years later."},
+  {id:'w5', q:'Why does music bring back memories?', tags:['nostalgia'],
+    simple:"A song can drop you right back into a specific afternoon, years later, faster than almost anything else. That's a well-documented, very human phenomenon.",
+    psych:"Music-evoked autobiographical memories tend to be unusually vivid and emotional, especially for songs tied to adolescence and early adulthood — a pattern researchers sometimes call the 'reminiscence bump,' since so many formative memories cluster in that period of life.",
+    science:"Music engages a wide network of brain regions at once — auditory processing, emotion (including the amygdala), and memory (the hippocampus), along with areas tied to reward. Some research suggests the medial prefrontal cortex, which helps link music, memory, and emotion together, may be part of why a song can feel like a direct line to a memory instead of just a sound."},
+  {id:'w6', q:'Why do we compare ourselves to other people?', tags:['pressure','identity'],
+    simple:"Comparing yourself to others isn't a personal flaw — it's a very ordinary way people try to figure out where they stand, especially when there's no other clear measuring stick.",
+    psych:"Social psychologist Leon Festinger's social comparison theory proposed that, in the absence of objective standards, people evaluate themselves by comparing to others — and that this becomes more frequent and more intense the more similar or relevant the other person seems.",
+    science:"Comparison can activate reward-related brain circuitry when it favors you, and threat- or stress-related responses when it doesn't — which may help explain why scrolling through other people's highlight reels can leave a real, physical residue of feeling behind. Researchers are still studying how heavily social media specifically amplifies this compared to comparison in daily life generally."},
+  {id:'w7', q:'Why can rejection feel so intense?', tags:['belonging','loneliness'],
+    simple:"Rejection can feel disproportionately large, especially during the teenage years — and there's a real reason peer approval carries so much weight at this age.",
+    psych:"Belonging is considered a core human need in psychology, not an optional extra — theories of motivation have long placed it near the base of what people need to function well, alongside safety and basic needs.",
+    science:"Research on adolescent brain development, including work by researchers like Laurence Steinberg, suggests reward-related brain systems are especially sensitive to social approval during the teenage years, which may make peer rejection register more intensely than it will later in life. This is thought to be a temporary, developmental sensitivity rather than a permanent trait."},
+  {id:'w8', q:'Why do we want things we know we cannot have?', tags:['yearning'],
+    simple:"Wanting something more once it feels out of reach isn't unusual — it's a pattern psychologists have studied directly.",
+    psych:"Psychological reactance theory suggests that when a choice or option feels restricted or unavailable, people often want it more, partly as a reaction to the restriction itself rather than the thing's actual value.",
+    science:"Scarcity and restriction can also increase activity in reward-anticipation circuitry in the brain — the pull isn't purely 'in your head' in a dismissive sense, it has a measurable physiological component. That doesn't mean every unreachable want is worth chasing; understanding where the pull comes from can make it easier to sit with, rather than immediately act on."},
+];
+
+const SHELF = {
+  brain: {label:'🧠 Brain', sub:'how the brain supports memory, feeling, and attention', color:'var(--dusty-blue)', topics:[
+    {id:'b1', title:'Memory', simple:"Memory isn't a recording — it's more like a rough sketch your brain redraws slightly every time you recall it.", psych:"Psychologists distinguish between types of memory — short-term, long-term, autobiographical — and study how emotion, attention, and repetition change what gets kept.", science:"The hippocampus is central to forming new memories, while the amygdala tags emotionally significant ones for stronger storage. Reconsolidation research shows recalled memories can shift slightly each time, which is part of why memories change subtly over years."},
+    {id:'b2', title:'Emotion', simple:"Emotions aren't just 'in your head' — they involve your whole body, your thoughts, and the situation you're in, all at once.", psych:"Modern emotion theories, including constructionist approaches associated with researchers like Lisa Feldman Barrett, suggest emotions are built in the moment from bodily sensations, context, and past experience, rather than being separate, hardwired reflexes.", science:"No single brain region 'is' an emotion. Emotional experience involves distributed networks — including the amygdala, insula, and prefrontal cortex — working together with the body's physiological state. This is an active and still-evolving area of neuroscience."},
+    {id:'b3', title:'Reward', simple:"The same brain systems that make food or connection feel good are involved when you get a text back, finish something hard, or feel hopeful about tomorrow.", psych:"Motivation research links reward to both 'wanting' (drive toward something) and 'liking' (the pleasure once you have it) — which don't always move together, and can help explain cravings that outlast enjoyment.", science:"Dopamine pathways, especially involving the ventral striatum, are central to reward processing — but dopamine is more closely tied to anticipation and motivation than to pleasure itself, a distinction supported by decades of neuroscience research."},
+  ]},
+  psychology: {label:'💭 Psychology', sub:'how the mind relates to itself and to other people', color:'var(--sage)', topics:[
+    {id:'p1', title:'Attachment', simple:"The way we learned to connect with caregivers early on can quietly shape how we approach closeness later — though it isn't fixed or unchangeable.", psych:"Attachment theory, originating with John Bowlby and expanded by researchers like Mary Ainsworth, describes patterns in how people seek closeness and handle separation, often summarized as secure, anxious, and avoidant tendencies.", science:"Attachment patterns are studied behaviorally more than through direct brain measurement, though some research links early relational experience to later stress-regulation systems. Researchers emphasize these patterns can shift over a lifetime with new relationships and experience."},
+    {id:'p2', title:'Social Comparison', simple:"Measuring yourself against other people is one of the most human things you can do — it's just not always a fair ruler.", psych:"Leon Festinger's social comparison theory describes 'upward' comparisons (to those who seem better off) and 'downward' comparisons (to those worse off), and how each affects mood and motivation differently.", science:"Comparison-related brain research points to overlapping activity with reward and threat processing, suggesting the sting of an unfavorable comparison isn't purely psychological — it has a measurable physiological signature, though the size of that effect varies by study and context."},
+    {id:'p3', title:'Emotional Regulation', simple:"Managing a big feeling isn't the same as ignoring it — regulation is more like learning to hold something without dropping it or being crushed by it.", psych:"Psychologists distinguish strategies like reappraisal (changing how you think about a situation) from suppression (pushing a feeling down), and research generally finds reappraisal tends to be more sustainable over time.", science:"The prefrontal cortex is involved in regulating signals from the amygdala; this connection tends to strengthen with practice and continues developing into early adulthood, which is part of why regulation can genuinely get easier with time and practice."},
+  ]},
+  human: {label:'🌎 Human Experience', sub:'the shared shape of ordinary human life', color:'var(--lavender)', topics:[
+    {id:'h1', title:'Friendship', simple:"Friendship is one of the few relationships we choose entirely on our own — which may be part of why losing or gaining one can shift so much.", psych:"Research on adolescent friendship highlights it as a key training ground for intimacy, trust, and conflict resolution — skills that carry into adult relationships.", science:"Studies on social bonds link close friendship to markers of long-term wellbeing and stress resilience, though researchers are careful to note this is correlational — many factors influence both friendship quality and wellbeing together."},
+    {id:'h2', title:'Nostalgia', simple:"Nostalgia is bittersweet on purpose — it's not just sadness about the past, it's often comfort drawn from it.", psych:"Constantine Sedikides and colleagues have researched nostalgia extensively, finding it's typically experienced as a mostly positive, meaning-giving emotion that people can deliberately draw on, especially during transitions or loneliness.", science:"Some brain-imaging research on nostalgia finds it engages reward-related and self-referential brain networks together, consistent with the idea that it's less about longing for something lost and more about drawing meaning and comfort from memory."},
+    {id:'h3', title:'Belonging', simple:"Wanting to belong somewhere isn't neediness — it's one of the most consistent needs researchers find across human life.", psych:"Belonging is often described in psychology as a fundamental need, not a bonus — closely tied to self-esteem, motivation, and mental wellbeing across the research literature.", science:"Social neuroscience research, including work on social exclusion (like the 'Cyberball' ostracism studies), has repeatedly found that being left out activates brain regions associated with distress, reinforcing that belonging isn't just a preference — it functions like a basic need."},
+  ]},
+};
+
+const RESEARCH_SPOTLIGHTS = [
+  {title:'The overlap between social and physical pain', field:'Social neuroscience', note:"A body of research beginning in the early 2000s, associated with researchers like Naomi Eisenberger and Matthew Lieberman, explored why rejection and exclusion can feel physically painful, finding overlapping brain activity between social and physical pain. Later work has refined and debated exactly how much overlap exists — a good example of science building on itself over time."},
+  {title:'Loneliness as a signal, not a flaw', field:'Health psychology', note:"John Cacioppo's decades of research reframed loneliness as a functional, evolved signal — uncomfortable by design, prompting reconnection — rather than a personal shortcoming. His work also connected chronic loneliness to broader physical health patterns, an area still being actively studied."},
+  {title:'Why nostalgia helps more than it hurts', field:'Personality and social psychology', note:"Constantine Sedikides and collaborators have run numerous studies finding that nostalgia, on balance, boosts mood, social connectedness, and a sense of meaning — countering the older assumption that dwelling on the past is inherently unhealthy."},
+];
+
+const EMOTIONS = {
+  sad: {blurb:"Sadness is often a response to loss — of a person, a version of life, or an expectation. It's one of the more universally recognized emotions across cultures.", related:['lonely','nostalgic','homesick','disappointed','empty'], cat:'losschange', q:'w3'},
+  lonely: {blurb:"Loneliness is the gap between the connection you want and the connection you feel you have — it isn't about headcount.", related:['isolated','unseen','disconnected','homesick'], cat:'loneliness', q:'w2'},
+  nostalgic: {blurb:"Nostalgia mixes warmth and ache — a way of visiting somewhere that no longer exists except in memory.", related:['homesick','sad','wistful'], cat:'nostalgia', q:'w5'},
+  homesick: {blurb:"Homesickness can happen even at home, if 'home' has more to do with a feeling or a time than a place.", related:['nostalgic','lonely'], cat:'nostalgia', q:'w3'},
+  disappointed: {blurb:"Disappointment shows up when reality and expectation don't match — a sign you cared how something would go.", related:['sad','confused'], cat:'confusion', q:'w6'},
+  empty: {blurb:"Feeling empty can mean you're between things — after intensity fades, or when nothing has quite filled a space yet.", related:['sad','confused','lonely'], cat:'quietthoughts', q:'w2'},
+  angry: {blurb:"Anger often shows up to protect something — a boundary, a value, or a hurt underneath.", related:['frustrated','betrayed','irritated','overwhelmed','resentful'], cat:'confusion', q:'w6'},
+  frustrated: {blurb:"Frustration is what happens when effort meets a wall — it's about being blocked, not about being wrong.", related:['angry','overwhelmed'], cat:'pressure', q:'w6'},
+  betrayed: {blurb:"Betrayal cuts because it involves trust — you can only be betrayed by someone you let matter.", related:['angry','sad'], cat:'losschange', q:'w1'},
+  overwhelmed: {blurb:"Overwhelm usually means too many demands landing at once, not that you're handling things badly.", related:['anxious','frustrated'], cat:'pressure', q:'w6'},
+  yearning: {blurb:"Yearning is wanting something — a person, a time, a version of life — that isn't reachable right now, or ever again.", related:['longing','missing','wishing','hoping','wanting'], cat:'yearning', q:'w8'},
+  longing: {blurb:"Longing is yearning that's settled in for a while — quieter than a craving, but persistent.", related:['yearning','missing'], cat:'yearning', q:'w1'},
+  missing: {blurb:"Missing someone is love with nowhere to go right now — the feeling doesn't mean anything is wrong with you.", related:['yearning','longing','homesick'], cat:'yearning', q:'w1'},
+  wishing: {blurb:"Wishing points at what you value, even when it's aimed at something that can't happen.", related:['yearning','hoping'], cat:'yearning', q:'w8'},
+  hoping: {blurb:"Hope is a forward-facing feeling — it doesn't require certainty, just possibility.", related:['wishing','yearning'], cat:'hope', q:'w8'},
+  wanting: {blurb:"Wanting something more once it feels out of reach is a documented, ordinary pattern of the mind, not a character flaw.", related:['yearning','wishing'], cat:'yearning', q:'w8'},
+  anxious: {blurb:"Anxiety is your system preparing for something uncertain — useful in small doses, exhausting when it doesn't turn off.", related:['uncertain','overwhelmed','restless'], cat:'pressure', q:'w6'},
+  uncertain: {blurb:"Uncertainty is uncomfortable because minds like to predict what's coming — not knowing takes real effort to sit with.", related:['confused','anxious'], cat:'confusion', q:'w3'},
+  restless: {blurb:"Restlessness can mean your mind or body wants to move or resolve something it hasn't yet.", related:['anxious','overwhelmed'], cat:'quietthoughts', q:'w6'},
+  happy: {blurb:"Happiness is often less about big events and more about small, repeated moments of ease and connection.", related:['grateful','proud','relieved','content','hopeful'], cat:'hope', q:'w6'},
+  grateful: {blurb:"Gratitude tends to widen focus — from what's missing to what's actually here.", related:['happy','content'], cat:'hope', q:'w2'},
+  proud: {blurb:"Pride is recognizing effort or growth as your own, even quietly, even without an audience.", related:['happy','relieved'], cat:'identity', q:'w6'},
+  relieved: {blurb:"Relief is what's left once a weight lifts — it can arrive even before you fully register what you were carrying.", related:['happy','hopeful'], cat:'hope', q:'w7'},
+  content: {blurb:"Contentment is a quieter kind of happy — enough, rather than more.", related:['grateful','happy'], cat:'hope', q:'w2'},
+  hopeful: {blurb:"Hopefulness doesn't require things to be fixed — just possible.", related:['happy','relieved'], cat:'hope', q:'w8'},
+  confused: {blurb:"Confusion often means you're feeling several things at once, faster than you can name them.", related:['uncertain','torn','lost','conflicted'], cat:'confusion', q:'w3'},
+  torn: {blurb:"Feeling torn usually means two things you value are pulling in different directions — not that you're indecisive by nature.", related:['confused','conflicted'], cat:'identity', q:'w6'},
+  lost: {blurb:"Feeling lost often shows up during transitions, when an old sense of direction hasn't been replaced by a new one yet.", related:['confused','uncertain'], cat:'growingup', q:'w3'},
+  conflicted: {blurb:"Being conflicted is a sign you're weighing something that actually matters to you.", related:['torn','confused'], cat:'identity', q:'w6'},
+  isolated: {blurb:"Isolation can be physical (actually alone) or emotional (alone in a crowd) — both are real, and both are worth naming.", related:['lonely','unseen'], cat:'loneliness', q:'w2'},
+  unseen: {blurb:"Feeling unseen often isn't about attention — it's about wanting the real you to be known, not just the version people meet.", related:['isolated','lonely'], cat:'belonging', q:'w7'},
+  disconnected: {blurb:"Disconnection can creep in slowly — small missed moments adding up rather than one big rupture.", related:['lonely','isolated'], cat:'loneliness', q:'w1'},
+};
+
+/* ================================================================
+   STATE
+   ================================================================ */
+let currentView = 'home';
+let letters = [];
+let editingLetterId = null;
+let pendingShareCategory = 'quietthoughts';
+let currentLRFilter = null;
+let currentEmotion = null;
+let nightModeOn = false;
+
+const WEATHER_RESPONSES = {
+  sunny:"warm light finds its way in.",
+  cloudy:"soft shadows, muted daylight. that's alright too.",
+  rainy:"rain against the window. nothing to fix right now.",
+  stormy:"a little louder outside today. still safe in here.",
+  foggy:"hard to see far. you don't have to see far.",
+  quiet:"the room settles toward evening.",
+  clearing:"the clouds are slowly opening back up.",
+};
+
+/* ================================================================
+   INIT
+   ================================================================ */
+async function init(){
+  await loadLetters();
+  renderCategoryGrid();
+  renderLivingRoom();
+  renderQuestions();
+  renderShelf();
+  renderResearch();
+  renderEmotionGrid();
+  buildStars();
+  setWeather('sunny');
+}
+document.addEventListener('DOMContentLoaded', init);
+
+function buildStars(){
+  const layer = document.getElementById('starsLayer');
+  let html = '';
+  for(let i=0;i<40;i++){
+    const top = Math.random()*70;
+    const left = Math.random()*100;
+    const delay = (Math.random()*4).toFixed(1);
+    html += `<div style="position:absolute; top:${top}%; left:${left}%; width:2px; height:2px; background:#F3ECD8; border-radius:50%; animation:twinkle 3.5s ease-in-out infinite; animation-delay:${delay}s;"></div>`;
+  }
+  layer.innerHTML = html;
+}
+
+/* ================================================================
+   NAVIGATION
+   ================================================================ */
+function navigate(view){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  const target = document.getElementById('view-'+view);
+  if(target) target.classList.add('active');
+  currentView = view;
+  document.querySelectorAll('.room-nav button').forEach(b=>b.classList.toggle('active', b.dataset.nav===view));
+  if(view!=='nightlight' && nightModeOn){ nightModeOn=false; document.documentElement.classList.remove('night-mode'); }
+  if(view==='myletters') renderMyLetters();
+  window.scrollTo({top:0, behavior: document.documentElement.classList.contains('reduce-motion') ? 'auto':'smooth'});
+  closeSearch();
+}
+
+/* ================================================================
+   WEATHER
+   ================================================================ */
+function setWeather(name){
+  document.body.setAttribute('data-weather', name);
+  document.querySelectorAll('.weather-btn').forEach(b=>b.classList.toggle('active', b.dataset.w===name));
+  document.getElementById('weatherResponse').textContent = WEATHER_RESPONSES[name] || '';
+  if(name==='stormy'){
+    setTimeout(()=>{ const f=document.getElementById('lightningFlash'); f.classList.remove('flash'); void f.offsetWidth; f.classList.add('flash'); }, 500);
+  }
+}
+
+/* ================================================================
+   NIGHT MODE
+   ================================================================ */
+function toggleNightMode(){
+  nightModeOn = !nightModeOn;
+  document.documentElement.classList.toggle('night-mode', nightModeOn);
+  if(nightModeOn){ navigate('nightlight'); document.getElementById('nlReveal').classList.remove('show'); }
+  else { navigate('home'); }
+}
+function exitNightMode(){ nightModeOn=false; document.documentElement.classList.remove('night-mode'); navigate('home'); }
+function nlWrite(){ toggleNightMode2Off(); navigate('letters'); }
+function nlCheckIn(){ toggleNightMode2Off(); navigate('home'); }
+function toggleNightMode2Off(){ nightModeOn=false; document.documentElement.classList.remove('night-mode'); }
+function nlRead(){
+  const l = CURATED_LETTERS[Math.floor(Math.random()*CURATED_LETTERS.length)];
+  const reveal = document.getElementById('nlReveal');
+  reveal.innerHTML = `<p style="font-family:var(--font-hand);font-size:1.2rem;color:var(--brown);">to: ${escapeHtml(l.to)}</p><p>${escapeHtml(l.body)}</p><p style="text-align:right;font-family:var(--font-hand);font-size:1.05rem;color:var(--brown-soft);">— ${escapeHtml(l.from)}</p>`;
+  reveal.classList.add('show');
+}
+function nlWonder(){
+  const w = WINDOW_QUESTIONS[Math.floor(Math.random()*WINDOW_QUESTIONS.length)];
+  const reveal = document.getElementById('nlReveal');
+  reveal.innerHTML = `<h3>${escapeHtml(w.q)}</h3><p>${escapeHtml(w.simple)}</p><p style="text-align:center;"><button class="btn btn-quiet" onclick="toggleNightMode2Off();navigate('window');openQuestion('${w.id}');">read more in the window →</button></p>`;
+  reveal.classList.add('show');
+}
+function nlJustStay(){
+  const reveal = document.getElementById('nlReveal');
+  reveal.innerHTML = `<p style="text-align:center; font-family:var(--font-hand); font-size:1.2rem; color:var(--brown-soft);">that's alright. the room isn't going anywhere.</p>`;
+  reveal.classList.add('show');
+}
+
+/* ================================================================
+   REDUCE MOTION
+   ================================================================ */
+function toggleReduceMotion(){
+  const on = document.documentElement.classList.toggle('reduce-motion');
+  document.getElementById('motionBtn').setAttribute('aria-pressed', on);
+}
+
+/* ================================================================
+   LETTERS — persistence via window.storage
+   ================================================================ */
+async function loadLetters(){
+  try{
+    const res = await window.storage.get('letters', false);
+    letters = res && res.value ? JSON.parse(res.value) : [];
+  }catch(e){ letters = []; }
+}
+async function persistLetters(){
+  try{ await window.storage.set('letters', JSON.stringify(letters), false); }
+  catch(e){ console.error('storage error', e); }
+}
+function updateCharCount(){
+  const body = document.getElementById('letterBody').value;
+  const el = document.getElementById('charCount');
+  if(body.length > 8000){ el.textContent = body.length + ' / 10000'; } else { el.textContent=''; }
+}
+function clearLetterForm(){
+  document.getElementById('letterTo').value='';
+  document.getElementById('letterFrom').value='';
+  document.getElementById('letterBody').value='';
+  document.getElementById('letterMsg').textContent='';
+  document.getElementById('charCount').textContent='';
+  editingLetterId=null;
+}
+async function saveLetterPrivate(){
+  const to = document.getElementById('letterTo').value.trim() || 'anyone';
+  const from = document.getElementById('letterFrom').value.trim() || 'someone';
+  const body = document.getElementById('letterBody').value.trim();
+  if(!body){ document.getElementById('letterMsg').textContent = "there's nothing here to keep yet."; return; }
+  if(editingLetterId){
+    const l = letters.find(x=>x.id===editingLetterId);
+    if(l){ l.to=to; l.from=from; l.body=body; l.updated=Date.now(); }
+  } else {
+    letters.unshift({id:'l'+Date.now(), to, from, body, created:Date.now(), shared:false, cat:null});
+  }
+  await persistLetters();
+  document.getElementById('letterMsg').textContent = "kept safe here, on this device.";
+  editingLetterId=null;
+}
+function openShareModal(){
+  const body = document.getElementById('letterBody').value.trim();
+  if(!body){ document.getElementById('letterMsg').textContent = "write something first — then you can decide whether to share it."; return; }
+  let catOptions = CATEGORIES.map(c=>`<option value="${c.id}">${c.icon} ${c.name}</option>`).join('');
+  openModal('customshare', `
+    <h2>before you share this in the Living Room</h2>
+    <ul>
+      <li>it may be reviewed before it's shown to anyone else</li>
+      <li>it will not be attached to your name or a public profile</li>
+      <li>sharing is completely optional — you can close this and keep it private instead</li>
+    </ul>
+    <p>please avoid including: full names, addresses, phone numbers, school names, social-media handles, exact locations, or anything else that could identify you or someone else.</p>
+    <label for="shareCat" style="display:block; margin-bottom:6px; font-size:.9rem; color:var(--brown-soft);">which room does this belong in?</label>
+    <select id="shareCat" style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--line); margin-bottom:16px; background:var(--cream); color:var(--ink);">${catOptions}</select>
+    <div style="text-align:center;"><button class="btn btn-warm" onclick="confirmShare()">share anonymously</button></div>
+  `);
+}
+async function confirmShare(){
+  const to = document.getElementById('letterTo').value.trim() || 'anyone';
+  const from = document.getElementById('letterFrom').value.trim() || 'someone';
+  const body = document.getElementById('letterBody').value.trim();
+  const cat = document.getElementById('shareCat').value;
+  const letter = {id:'l'+Date.now(), to, from, body, created:Date.now(), shared:true, cat};
+  letters.unshift(letter);
+  await persistLetters();
+  closeModal();
+  document.getElementById('letterMsg').innerHTML = "thank you for sharing something so honest. <br><small style='color:var(--warm-gray);'>in this preview, sharing keeps things local to your device rather than truly publishing them — you can see how it would look in the Living Room, tagged as yours.</small>";
+  renderLivingRoom();
+}
+function renderMyLetters(){
+  const q = (document.getElementById('myLettersSearch').value||'').toLowerCase();
+  const list = document.getElementById('myLettersList');
+  const filtered = letters.filter(l => l.to.toLowerCase().includes(q) || l.from.toLowerCase().includes(q));
+  if(filtered.length===0){
+    list.innerHTML = `<p class="empty-note">${letters.length===0 ? "your letters will live here.<br>take your time." : "nothing matches that search."}</p>`;
+    return;
+  }
+  list.innerHTML = filtered.map(l=>`
+    <div class="letter-row" onclick="openLetterDetail('${l.id}')" tabindex="0" role="button" aria-label="Open letter to ${escapeHtml(l.to)}">
+      <div><span class="lr-to">to: ${escapeHtml(l.to)}</span><br><span class="lr-meta">${l.shared?'shared anonymously · ':''}${new Date(l.created).toLocaleDateString()}</span></div>
+      <span style="color:var(--warm-gray);">→</span>
+    </div>
+  `).join('');
+}
+function openLetterDetail(id){
+  const l = letters.find(x=>x.id===id);
+  if(!l) return;
+  openModal('letterdetail', `
+    <p style="font-family:var(--font-hand); font-size:1.3rem; color:var(--brown);">to: ${escapeHtml(l.to)}</p>
+    <p style="white-space:pre-wrap;">${escapeHtml(l.body)}</p>
+    <p style="text-align:right; font-family:var(--font-hand); font-size:1.1rem; color:var(--brown-soft);">— ${escapeHtml(l.from)}</p>
+    <div style="display:flex; gap:8px; justify-content:center; margin-top:18px; flex-wrap:wrap;">
+      <button class="btn btn-quiet" onclick="editLetter('${l.id}')">edit</button>
+      <button class="btn btn-outline" onclick="exportLetter('${l.id}')">export</button>
+      <button class="btn btn-danger" onclick="deleteLetter('${l.id}')">delete</button>
+    </div>
+  `);
+}
+function editLetter(id){
+  const l = letters.find(x=>x.id===id);
+  if(!l) return;
+  closeModal();
+  navigate('letters');
+  document.getElementById('letterTo').value = l.to;
+  document.getElementById('letterFrom').value = l.from;
+  document.getElementById('letterBody').value = l.body;
+  editingLetterId = id;
+  document.getElementById('letterMsg').textContent = "editing this letter — save to update it.";
+}
+async function deleteLetter(id){
+  letters = letters.filter(x=>x.id!==id);
+  await persistLetters();
+  closeModal();
+  renderMyLetters();
+  renderLivingRoom();
+}
+function exportLetter(id){
+  const l = letters.find(x=>x.id===id);
+  if(!l) return;
+  const text = `to: ${l.to}\n\n${l.body}\n\n— ${l.from}`;
+  const blob = new Blob([text], {type:'text/plain'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'letter-to-'+l.to.replace(/[^a-z0-9]+/gi,'-').toLowerCase()+'.txt';
+  a.click();
+}
+async function clearAllLetters(){
+  openModal('confirmclear', `
+    <h2>clear all your letters?</h2>
+    <p>this removes every letter stored in this browser. it can't be undone — export anything you'd like to keep first.</p>
+    <div style="display:flex; gap:10px; justify-content:center;">
+      <button class="btn btn-outline" onclick="closeModal()">never mind</button>
+      <button class="btn btn-danger" onclick="reallyClearAll()">clear them</button>
+    </div>
+  `);
+}
+async function reallyClearAll(){
+  letters = [];
+  await persistLetters();
+  closeModal();
+  renderMyLetters();
+  renderLivingRoom();
+}
+
+/* ================================================================
+   LIVING ROOM
+   ================================================================ */
+function renderCategoryGrid(){
+  const grid = document.getElementById('categoryGrid');
+  grid.innerHTML = `<button class="category-chip ${currentLRFilter===null?'active':''}" onclick="filterLivingRoom(null)"><span class="cc-icon">🏠</span><span class="cc-name">all rooms</span></button>` +
+    CATEGORIES.map(c=>`<button class="category-chip ${currentLRFilter===c.id?'active':''}" onclick="filterLivingRoom('${c.id}')"><span class="cc-icon">${c.icon}</span><span class="cc-name">${c.name}</span></button>`).join('');
+}
+function filterLivingRoom(catId){
+  currentLRFilter = catId;
+  renderCategoryGrid();
+  renderLivingRoom();
+}
+function renderLivingRoom(){
+  const grid = document.getElementById('livingRoomGrid');
+  const mine = letters.filter(l=>l.shared);
+  let pool = CURATED_LETTERS.concat(mine);
+  if(currentLRFilter) pool = pool.filter(l=>l.cat===currentLRFilter);
+  if(pool.length===0){
+    grid.innerHTML = `<p class="empty-note" style="grid-column:1/-1;">nothing here yet.<br>maybe you'll be the first to leave something.</p>`;
+    return;
+  }
+  grid.innerHTML = pool.map(l=>{
+    const cat = CATEGORIES.find(c=>c.id===l.cat);
+    const mineTag = mine.includes(l) ? `<span class="lc-mine">yours</span>` : '';
+    return `<div class="letter-card">${mineTag}${cat?`<span class="lc-tag">${cat.icon} ${cat.name}</span>`:''}<div class="lc-to">to: ${escapeHtml(l.to)}</div><div class="lc-body">${escapeHtml(l.body)}</div><div class="lc-from">— ${escapeHtml(l.from)}</div></div>`;
+  }).join('');
+}
+async function suggestCollection(){
+  const title = document.getElementById('collectionTitle').value.trim();
+  const msg = document.getElementById('collectionMsg');
+  if(!title){ msg.textContent = "give it a title first?"; return; }
+  document.getElementById('collectionTitle').value='';
+  document.getElementById('collectionDesc').value='';
+  msg.textContent = "thank you — ideas like this get reviewed before becoming part of the Living Room.";
+}
+
+/* ================================================================
+   WINDOW
+   ================================================================ */
+function renderQuestions(){
+  const list = document.getElementById('questionList');
+  list.innerHTML = WINDOW_QUESTIONS.map(w=>`
+    <div class="q-card" id="qcard-${w.id}">
+      <button class="q-trigger" onclick="toggleQuestion('${w.id}')" aria-expanded="false">
+        <span>${escapeHtml(w.q)}</span><span class="chev" aria-hidden="true">›</span>
+      </button>
+      <div class="q-body">
+        <div class="q-inner">
+          <div class="tier-tabs" role="tablist">
+            <button class="tier-tab active" onclick="setTier('${w.id}','simple',this)">🌱 the simple version</button>
+            <button class="tier-tab" onclick="setTier('${w.id}','psych',this)">🧠 the psychology</button>
+            <button class="tier-tab" onclick="setTier('${w.id}','science',this)">🔬 the science</button>
+          </div>
+          <div class="tier-pane active" data-tier="simple"><p>${escapeHtml(w.simple)}</p></div>
+          <div class="tier-pane" data-tier="psych"><p>${escapeHtml(w.psych)}</p></div>
+          <div class="tier-pane" data-tier="science"><p>${escapeHtml(w.science)}</p></div>
+          <div class="q-tags">${w.tags.map(t=>{const c=CATEGORIES.find(x=>x.id===t); return c?`<button class="q-tag" onclick="navigate('livingroom');filterLivingRoom('${t}')">${c.icon} ${c.name}</button>`:'';}).join('')}</div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+function toggleQuestion(id){
+  const card = document.getElementById('qcard-'+id);
+  const wasOpen = card.classList.contains('open');
+  document.querySelectorAll('.q-card').forEach(c=>{c.classList.remove('open'); c.querySelector('.q-trigger').setAttribute('aria-expanded','false');});
+  if(!wasOpen){ card.classList.add('open'); card.querySelector('.q-trigger').setAttribute('aria-expanded','true'); card.scrollIntoView({behavior:document.documentElement.classList.contains('reduce-motion')?'auto':'smooth', block:'center'}); }
+}
+function openQuestion(id){
+  const card = document.getElementById('qcard-'+id);
+  if(card && !card.classList.contains('open')) toggleQuestion(id);
+}
+function setTier(id, tier, btn){
+  const card = document.getElementById('qcard-'+id);
+  card.querySelectorAll('.tier-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  card.querySelectorAll('.tier-pane').forEach(p=>p.classList.toggle('active', p.dataset.tier===tier));
+}
+
+/* ================================================================
+   SHELF
+   ================================================================ */
+function renderShelf(){
+  const wrap = document.getElementById('shelfSections');
+  wrap.innerHTML = Object.entries(SHELF).map(([key, section])=>`
+    <div class="shelf-section">
+      <h3>${section.label}</h3>
+      <p class="shelf-sub">${section.sub}</p>
+      <div class="shelf-row">
+        ${section.topics.map(t=>`<button class="book-spine" style="background:${section.color};" onclick="openBook('${key}','${t.id}')"><span>${escapeHtml(t.title)}</span></button>`).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+function openBook(sectionKey, topicId){
+  const topic = SHELF[sectionKey].topics.find(t=>t.id===topicId);
+  if(!topic) return;
+  openModal('book', `
+    <h2>${escapeHtml(topic.title)}</h2>
+    <div class="tier-tabs">
+      <button class="tier-tab active" onclick="setBookTier(this,'simple')">🌱 simple</button>
+      <button class="tier-tab" onclick="setBookTier(this,'psych')">🧠 psychology</button>
+      <button class="tier-tab" onclick="setBookTier(this,'science')">🔬 science</button>
+    </div>
+    <div class="tier-pane active" data-booktier="simple"><p>${escapeHtml(topic.simple)}</p></div>
+    <div class="tier-pane" data-booktier="psych"><p>${escapeHtml(topic.psych)}</p></div>
+    <div class="tier-pane" data-booktier="science"><p>${escapeHtml(topic.science)}</p></div>
+  `);
+}
+function setBookTier(btn, tier){
+  const box = document.getElementById('modalBox');
+  box.querySelectorAll('.tier-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  box.querySelectorAll('[data-booktier]').forEach(p=>p.classList.toggle('active', p.dataset.booktier===tier));
+}
+function renderResearch(){
+  document.getElementById('researchList').innerHTML = RESEARCH_SPOTLIGHTS.map(r=>`
+    <div class="research-card">
+      <h4 style="margin:0 0 4px 0; font-family:var(--font-display); color:var(--brown);">${escapeHtml(r.title)}</h4>
+      <p>${escapeHtml(r.note)}</p>
+      <p class="rc-meta">field: ${escapeHtml(r.field)} — a starting point for further reading, not a full literature review.</p>
+    </div>
+  `).join('');
+}
+
+/* ================================================================
+   EMOTION EXPLORER
+   ================================================================ */
+function renderEmotionGrid(){
+  const roots = ['sad','angry','yearning','anxious','happy','confused','lonely','hopeful'];
+  document.getElementById('emotionGrid').innerHTML = roots.map(e=>`<button class="emo-chip" onclick="selectEmotion('${e}')">${e}</button>`).join('');
+}
+function selectEmotion(word){
+  currentEmotion = word;
+  document.querySelectorAll('.emo-chip').forEach(c=>c.classList.toggle('active', c.textContent===word));
+  const data = EMOTIONS[word];
+  const detail = document.getElementById('emotionDetail');
+  if(!data){ detail.innerHTML = `<p>${escapeHtml(word)} — still finding the words for this one.</p>`; return; }
+  const cat = CATEGORIES.find(c=>c.id===data.cat);
+  const q = WINDOW_QUESTIONS.find(w=>w.id===data.q);
+  detail.innerHTML = `
+    <h3 style="text-transform:capitalize;">${escapeHtml(word)}</h3>
+    <p>${escapeHtml(data.blurb)}</p>
+    <div class="emo-related">${data.related.map(r=>`<button onclick="selectEmotion('${r}')">${escapeHtml(r)}</button>`).join('')}</div>
+    <div class="emo-links">
+      ${cat?`<button onclick="navigate('livingroom');filterLivingRoom('${cat.id}')">${cat.icon} read in the Living Room</button>`:''}
+      ${q?`<button onclick="navigate('window');openQuestion('${q.id}')">🪟 ${escapeHtml(q.q)}</button>`:''}
+    </div>
+  `;
+}
+
+/* ================================================================
+   RANDOM DISCOVERY
+   ================================================================ */
+function randomDiscovery(){
+  const pools = ['letter','question','shelf','emotion'];
+  const pick = pools[Math.floor(Math.random()*pools.length)];
+  if(pick==='letter'){
+    navigate('livingroom'); filterLivingRoom(null);
+  } else if(pick==='question'){
+    const w = WINDOW_QUESTIONS[Math.floor(Math.random()*WINDOW_QUESTIONS.length)];
+    navigate('window'); setTimeout(()=>openQuestion(w.id), 80);
+  } else if(pick==='shelf'){
+    navigate('shelf');
+  } else {
+    const words = Object.keys(EMOTIONS);
+    const w = words[Math.floor(Math.random()*words.length)];
+    navigate('emotions'); setTimeout(()=>selectEmotion(w), 80);
+  }
+}
+
+/* ================================================================
+   SEARCH
+   ================================================================ */
+function openSearch(){ document.getElementById('searchOverlay').classList.add('show'); document.getElementById('searchInput').focus(); }
+function closeSearch(){ document.getElementById('searchOverlay').classList.remove('show'); }
+function runSearch(){
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  const results = document.getElementById('searchResults');
+  if(q.length<2){ results.innerHTML=''; return; }
+  let groups = [];
+
+  const letterHits = CURATED_LETTERS.filter(l=>l.to.toLowerCase().includes(q)||l.body.toLowerCase().includes(q)||l.from.toLowerCase().includes(q));
+  if(letterHits.length) groups.push({label:'the living room', items: letterHits.map(l=>({label:'to: '+l.to, action:`navigate('livingroom');filterLivingRoom('${l.cat}')`}))});
+
+  const catHits = CATEGORIES.filter(c=>c.name.toLowerCase().includes(q)||c.blurb.toLowerCase().includes(q));
+  if(catHits.length) groups.push({label:'collections', items: catHits.map(c=>({label:c.icon+' '+c.name, action:`navigate('livingroom');filterLivingRoom('${c.id}')`}))});
+
+  const qHits = WINDOW_QUESTIONS.filter(w=>w.q.toLowerCase().includes(q)||w.simple.toLowerCase().includes(q));
+  if(qHits.length) groups.push({label:'the window', items: qHits.map(w=>({label:w.q, action:`navigate('window');openQuestion('${w.id}')`}))});
+
+  let shelfHits=[];
+  Object.entries(SHELF).forEach(([key,sec])=>sec.topics.forEach(t=>{ if(t.title.toLowerCase().includes(q)||t.simple.toLowerCase().includes(q)) shelfHits.push({label:sec.label+' — '+t.title, action:`navigate('shelf')`}); }));
+  if(shelfHits.length) groups.push({label:'the shelf', items: shelfHits});
+
+  const emoHits = Object.keys(EMOTIONS).filter(e=>e.includes(q));
+  if(emoHits.length) groups.push({label:'feelings', items: emoHits.map(e=>({label:e, action:`navigate('emotions');selectEmotion('${e}')`}))});
+
+  if(groups.length===0){ results.innerHTML = `<p class="empty-note">nothing here yet. try another word.</p>`; return; }
+  results.innerHTML = groups.map(g=>`<div class="sr-group"><h4>${g.label}</h4>${g.items.slice(0,6).map(i=>`<button class="sr-item" onclick="${i.action};closeSearch();">${escapeHtml(i.label)}</button>`).join('')}</div>`).join('');
+}
+
+/* ================================================================
+   MODALS
+   ================================================================ */
+const MODAL_CONTENT = {
+  about: `<h2>about somewhere soft</h2>
+    <p>sometimes we know exactly what we're feeling but don't know how to say it. sometimes we think we're the only person who feels a certain way.</p>
+    <p>somewhere soft is a place to put those thoughts somewhere, discover that other people carry similar feelings, and get curious about the minds behind them — the way emotional experience connects to psychology, and psychology connects to neuroscience.</p>
+    <p>it moves in one direction: feel, express, relate, understand, explore, and then — rest. you don't have to solve everything in one visit.</p>`,
+  privacy: `<h2>privacy</h2>
+    <p>this is someone's real life, so privacy matters here.</p>
+    <p><strong>what we don't ask for:</strong> no account, no email, no name, no exact location, no school, no social-media handles.</p>
+    <p><strong>private letters:</strong> kept only in your browser on this device, never sent to a server. clearing your browser data will erase them.</p>
+    <p><strong>shared letters:</strong> meant to be reviewed before appearing publicly and never attached to your identity. in this preview build, sharing stays local to your device so you can see how it would look, rather than actually publishing anywhere.</p>
+    <p>never include identifying details in anything you write to share.</p>`,
+  guidelines: `<h2>community guidelines</h2>
+    <p>this is someone's real life.</p>
+    <ul>
+      <li>be kind.</li>
+      <li>don't identify people — yourself or anyone else.</li>
+      <li>don't post private information.</li>
+      <li>don't target someone.</li>
+      <li>don't turn someone's vulnerable moment into entertainment.</li>
+      <li>don't encourage harmful behavior.</li>
+      <li>don't pressure anyone to respond.</li>
+    </ul>
+    <p>somewhere soft is a place to leave thoughts. it isn't a place to control, expose, or hurt other people.</p>`,
+  research: `<h2>research &amp; sources</h2>
+    <p>the psychology and neuroscience across somewhere soft aim to reflect established research and clearly note where the science is settled versus still developing.</p>
+    <p>this preview includes a starting set of topics, named researchers, and general findings rather than a complete, individually-cited literature review. a full version of this site would attach direct citations to every specific claim before publishing.</p>
+    <p>if something here interests you, the researcher and field named alongside it is a good starting point for looking further.</p>`,
+  help: `<h2>need help?</h2>
+    <p>somewhere soft is a space for reflection — not therapy, diagnosis, or crisis care.</p>
+    <p>if something you're carrying feels like more than you can hold alone, it's worth telling a real person: a parent or guardian, another trusted adult, a school counselor, or a doctor. that's not a failure — it's what those people are there for.</p>
+    <p>if you're outside the US, searching "[your country] crisis helpline" will usually turn up a free, local number to call or text.</p>
+    <p style="font-size:.85rem; color:var(--warm-gray);">in the US: the 988 Suicide &amp; Crisis Lifeline is free to call or text, any time. Crisis Text Line is free by texting HOME to 741741.</p>`,
+  credits: `<h2>credits</h2>
+    <p>somewhere soft was built as a small digital home — writing, design, and code, made to feel less like a website and more like a place.</p>
+    <p>thank you for stopping by.</p>`,
+};
+function openModal(key, customHtml){
+  document.getElementById('modalContent').innerHTML = customHtml || MODAL_CONTENT[key] || '';
+  document.getElementById('modalOverlay').classList.add('show');
+  document.getElementById('modalBox').focus();
+}
+function closeModal(){ document.getElementById('modalOverlay').classList.remove('show'); }
+document.addEventListener('keydown', e=>{
+  if(e.key==='Escape'){ closeModal(); closeSearch(); }
+  if((e.key==='Enter' || e.key===' ') && e.target.classList && e.target.classList.contains('letter-row')){
+    e.preventDefault(); e.target.click();
+  }
+});
+
+/* ================================================================
+   UTIL
+   ================================================================ */
+function escapeHtml(str){
+  return String(str).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+</script>
+</body>
+</html>
