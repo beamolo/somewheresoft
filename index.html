@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>somewhere soft — a little place for the things we don't know how to say</title>
@@ -839,10 +840,48 @@ const EMOTIONS = {
 };
 
 /* ================================================================
+   SUPABASE
+   ================================================================ */
+const SUPABASE_URL = 'https://qkxykijlbsyhtkrdgnrr.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_qqxeZPGlDyivfjxTIV3FtA_cVBOxXp2';
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
+
+/* ================================================================
    STATE
    ================================================================ */
 let currentView = 'home';
 let letters = [];
+let publicLetters = [];
+async function loadPublicLetters(){
+  try{
+    const { data, error } = await supabaseClient
+      .from('letters')
+      .select('id, letter, nickname, "to", category, created_at, shared, published')
+      .eq('published', true)
+      .order('created_at', { ascending: false });
+
+    if(error) throw error;
+
+    publicLetters = (data || []).map(item => ({
+      id: 'sb-' + item.id,
+      to: item.to || 'anyone',
+      from: item.nickname || 'someone',
+      body: item.letter || '',
+      created: new Date(item.created_at).getTime(),
+      shared: true,
+      cat: item.category || 'quietthoughts',
+      published: true
+    }));
+
+  }catch(e){
+    console.error('Supabase load error:', e);
+    publicLetters = [];
+  }
+}
 let editingLetterId = null;
 let pendingShareCategory = 'quietthoughts';
 let currentLRFilter = null;
@@ -863,7 +902,10 @@ const WEATHER_RESPONSES = {
    INIT
    ================================================================ */
 async function init(){
+
   await loadLetters();
+  await loadPublicLetters();
+
   renderCategoryGrid();
   renderLivingRoom();
   renderQuestions();
@@ -957,10 +999,19 @@ function toggleReduceMotion(){
    LETTERS — persistence via window.storage
    ================================================================ */
 async function loadLetters(){
+
   try{
+
     const res = await window.storage.get('letters', false);
+
     letters = res && res.value ? JSON.parse(res.value) : [];
-  }catch(e){ letters = []; }
+
+  }catch(e){
+
+    letters = [];
+
+  }
+
 }
 async function persistLetters(){
   try{ await window.storage.set('letters', JSON.stringify(letters), false); }
@@ -994,35 +1045,56 @@ async function saveLetterPrivate(){
   document.getElementById('letterMsg').textContent = "kept safe here, on this device.";
   editingLetterId=null;
 }
-function openShareModal(){
-  const body = document.getElementById('letterBody').value.trim();
-  if(!body){ document.getElementById('letterMsg').textContent = "write something first — then you can decide whether to share it."; return; }
-  let catOptions = CATEGORIES.map(c=>`<option value="${c.id}">${c.icon} ${c.name}</option>`).join('');
-  openModal('customshare', `
-    <h2>before you share this in the Living Room</h2>
-    <ul>
-      <li>it may be reviewed before it's shown to anyone else</li>
-      <li>it will not be attached to your name or a public profile</li>
-      <li>sharing is completely optional — you can close this and keep it private instead</li>
-    </ul>
-    <p>please avoid including: full names, addresses, phone numbers, school names, social-media handles, exact locations, or anything else that could identify you or someone else.</p>
-    <label for="shareCat" style="display:block; margin-bottom:6px; font-size:.9rem; color:var(--brown-soft);">which room does this belong in?</label>
-    <select id="shareCat" style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--line); margin-bottom:16px; background:var(--cream); color:var(--ink);">${catOptions}</select>
-    <div style="text-align:center;"><button class="btn btn-warm" onclick="confirmShare()">share anonymously</button></div>
-  `);
-}
+
 async function confirmShare(){
+
   const to = document.getElementById('letterTo').value.trim() || 'anyone';
   const from = document.getElementById('letterFrom').value.trim() || 'someone';
   const body = document.getElementById('letterBody').value.trim();
   const cat = document.getElementById('shareCat').value;
-  const letter = {id:'l'+Date.now(), to, from, body, created:Date.now(), shared:true, cat};
+
+  if(!body) return;
+
+  const { error } = await supabaseClient
+    .from('letters')
+    .insert({
+      letter: body,
+      nickname: from,
+      to: to,
+      category: cat,
+      shared: true,
+      published: true
+    });
+
+  if(error){
+    console.error('Supabase error:', error);
+    document.getElementById('letterMsg').innerHTML =
+      "something went wrong while sending your letter. please try again.";
+    return;
+  }
+
+  const letter = {
+    id: 'l' + Date.now(),
+    to,
+    from,
+    body,
+    created: Date.now(),
+    shared: true,
+    cat,
+    published: true
+  };
+
   letters.unshift(letter);
-  await persistLetters();
+
   closeModal();
-  document.getElementById('letterMsg').innerHTML = "thank you for sharing something so honest. <br><small style='color:var(--warm-gray);'>in this preview, sharing keeps things local to your device rather than truly publishing them — you can see how it would look in the Living Room, tagged as yours.</small>";
+
+  document.getElementById('letterMsg').innerHTML =
+    "thank you for sharing something so honest. <br><small style='color:var(--warm-gray);'>your letter is now in the Living Room.</small>";
+
   renderLivingRoom();
 }
+
+function renderMyLetters(){
 function renderMyLetters(){
   const q = (document.getElementById('myLettersSearch').value||'').toLowerCase();
   const list = document.getElementById('myLettersList');
@@ -1114,7 +1186,7 @@ function filterLivingRoom(catId){
 function renderLivingRoom(){
   const grid = document.getElementById('livingRoomGrid');
   const mine = letters.filter(l=>l.shared);
-  let pool = CURATED_LETTERS.concat(mine);
+let pool = CURATED_LETTERS.concat(mine, publicLetters);
   if(currentLRFilter) pool = pool.filter(l=>l.cat===currentLRFilter);
   if(pool.length===0){
     grid.innerHTML = `<p class="empty-note" style="grid-column:1/-1;">nothing here yet.<br>maybe you'll be the first to leave something.</p>`;
