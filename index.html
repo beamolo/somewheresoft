@@ -996,26 +996,24 @@ function toggleReduceMotion(){
 }
 
 /* ================================================================
-   LETTERS — persistence via window.storage
+   LETTERS — persistence via localStorage
    ================================================================ */
 async function loadLetters(){
-
-  try{
-
-    const res = await window.storage.get('letters', false);
-
-    letters = res && res.value ? JSON.parse(res.value) : [];
-
-  }catch(e){
-
+  try {
+    const saved = localStorage.getItem('letters');
+    letters = saved ? JSON.parse(saved) : [];
+  } catch(e) {
+    console.error('loading letters failed:', e);
     letters = [];
-
   }
-
 }
+
 async function persistLetters(){
-  try{ await window.storage.set('letters', JSON.stringify(letters), false); }
-  catch(e){ console.error('storage error', e); }
+  try {
+    localStorage.setItem('letters', JSON.stringify(letters));
+  } catch(e) {
+    console.error('saving letters failed:', e);
+  }
 }
 function updateCharCount(){
   const body = document.getElementById('letterBody').value;
@@ -1091,10 +1089,9 @@ async function confirmShare(){
   document.getElementById('letterMsg').innerHTML =
     "thank you for sharing something so honest. <br><small style='color:var(--warm-gray);'>your letter is now in the Living Room.</small>";
 
-  renderLivingRoom();
+renderLivingRoom();
 }
 
-function renderMyLetters(){
 function renderMyLetters(){
   const q = (document.getElementById('myLettersSearch').value||'').toLowerCase();
   const list = document.getElementById('myLettersList');
