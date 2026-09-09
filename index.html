@@ -1044,6 +1044,53 @@ async function saveLetterPrivate(){
   editingLetterId=null;
 }
 
+function openShareModal(){
+  const body = document.getElementById('letterBody').value.trim();
+
+  if(!body){
+    document.getElementById('letterMsg').textContent =
+      "write something first — then you can decide whether to share it.";
+    return;
+  }
+
+  let catOptions = CATEGORIES.map(c =>
+    `<option value="${c.id}">${c.icon} ${c.name}</option>`
+  ).join('');
+
+  openModal('customshare', `
+    <h2>before you share this in the Living Room</h2>
+    <ul>
+      <li>it may be reviewed before it's shown to anyone else</li>
+      <li>it will not be attached to your name or a public profile</li>
+      <li>sharing is completely optional — you can close this and keep it private instead</li>
+    </ul>
+
+    <p>
+      please avoid including: full names, addresses, phone numbers,
+      school names, social-media handles, exact locations, or anything
+      else that could identify you or someone else.
+    </p>
+
+    <label for="shareCat"
+      style="display:block; margin-bottom:6px; font-size:.9rem; color:var(--brown-soft);">
+      which room does this belong in?
+    </label>
+
+    <select id="shareCat"
+      style="width:100%; padding:10px; border-radius:8px;
+      border:1px solid var(--line); margin-bottom:16px;
+      background:var(--cream); color:var(--ink);">
+      ${catOptions}
+    </select>
+
+    <div style="text-align:center;">
+      <button class="btn btn-warm" onclick="confirmShare()">
+        share anonymously
+      </button>
+    </div>
+  `);
+}
+
 async function confirmShare(){
 
   const to = document.getElementById('letterTo').value.trim() || 'anyone';
